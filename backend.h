@@ -7,9 +7,14 @@
 class Backend : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(qreal delta READ delta WRITE setDelta NOTIFY deltaChanged)
-    Q_INVOKABLE int insertNew(QString name, QString phone, QString money, QString fingerID, QString password);
 
+    Q_PROPERTY(qreal delta READ delta WRITE setDelta NOTIFY deltaChanged)
+
+    Q_INVOKABLE int insertNew(QString name, QString phone, QString money, QString fingerID1, QString fingerID2, QString password);
+
+    Q_INVOKABLE void select(QString fingerID, QList<QString>& result);
+
+    Q_INVOKABLE void update(QString phone, QString money);
 
 public:
     Backend(QQuickItem *parent = 0);

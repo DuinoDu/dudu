@@ -13,7 +13,7 @@ ApplicationWindow {
     minimumHeight : 600
     minimumWidth : 800
 
-    //title: qsTr("嘟嘟鲜果")
+    title: qsTr("嘟嘟鲜果")
 
     MainForm {
         anchors.fill: parent
@@ -21,9 +21,5 @@ ApplicationWindow {
 
     Backend{
         id: db
-        delta: 2.0
     }
-
-    Component.onCompleted: console.log(db.delta)
-
 }
