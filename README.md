@@ -1,2 +1,2 @@
 # dudu
-A desktop software for DuDu Fruit, which sells fruit.
+A desktop software based on Qt for DuDu Fruit, which sells fruit.

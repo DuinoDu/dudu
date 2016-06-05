@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+        <file>CreateTab.qml</file>
+        <file>CostTab.qml</file>
+        <file>AddTab.qml</file>
+    </qresource>
+</RCC>
