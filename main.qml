@@ -15,7 +15,7 @@ ApplicationWindow {
 
     title: qsTr("嘟嘟鲜果")
 
-    MainForm {
+    MainContent {
         anchors.fill: parent
     }
 
