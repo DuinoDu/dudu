@@ -4,6 +4,9 @@ import "ui/"
 
 Rectangle{
     id: root
+
+    signal saveClicked(string name, string phone, string money, string passward, string finger1, string finger2)
+
     width: 400
     height: 400
 
@@ -76,6 +79,15 @@ Rectangle{
         x: 57
         y: 293
         text: qsTr("确定")
+        onClicked: {
+            root.saveClicked(
+                        textInput_name.text,
+                        textInput_phone.text,
+                        textInput_money.text,
+                        textInput_password.text,
+                        label_finger1.text,
+                        label_finger2.text);
+        }
     }
 
     Button {
@@ -110,7 +122,7 @@ Rectangle{
     }
 
     Input_DD {
-        id: textInput_money1
+        id: textInput_password
         x: 132
         y: 177
         text: qsTr("123456")
