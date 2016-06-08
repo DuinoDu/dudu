@@ -44,8 +44,10 @@ int Backend::insertNew(QString name, QString phone, QString money, QString passw
 }
 
 
-void Backend::select(QString fingerID, QList<QString>& result)
+QList<QString> Backend::select(QString fingerID)
 {
+    QList<QString> result;
+
     QString filter;
     filter.append("fingerID1=");
     filter.append("\"");
@@ -69,7 +71,7 @@ void Backend::select(QString fingerID, QList<QString>& result)
 
         if(!query->exec(selectQuery)){
             qDebug() << "select failed.\n";
-            return;
+            return result;
         }
         else{
             qDebug() << "select success\n";
@@ -82,19 +84,29 @@ void Backend::select(QString fingerID, QList<QString>& result)
     int nameField = query->record().indexOf("name");
     int phoneField = query->record().indexOf("phone");
     int money = query->record().indexOf("money");
-    while(query->next()){
-        //QList<QString> result;
+    if(query->next()){
         result.append(query->value(nameField).toString());
         result.append(query->value(phoneField).toString());
         result.append(query->value(money).toString());
-        //emit
     }
+
+    return result;
 }
 
 
-void Backend::update(QString phone, QString money)
+void Backend::updateMoney(QString phone, QString money)
 {
     qDebug() << phone << money;
+
+    query->prepare("update customer set money=?  where phone=? ");
+    query->bindValue(0, money);
+    query->bindValue(1, phone);
+
+    if(!query->exec()){
+        qDebug() << "Error: update failed.";
+        return;
+    }
+    qDebug() << "updata successfully";
 }
 
 

@@ -28,6 +28,15 @@ Item {
             title: "消费"
             CostTab{
                 anchors.fill: parent
+                onRecogFinger: {
+                    console.log("put your finger on the plane");
+
+                    // search database
+                    searchResult = db.select("1");
+                }
+                onUpdateMoney: {
+                    db.updateMoney(phone, money)
+                }
             }
         }
         Tab {

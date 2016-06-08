@@ -7,6 +7,18 @@ Rectangle{
     height: 400
     color: "#dddddd"
 
+    signal recogFinger()
+    signal updateMoney(string phone, string money)
+
+    property variant searchResult: []
+    onSearchResultChanged: {
+        if(root.searchResult.length > 0){
+            label_name.text = root.searchResult[0];
+            label_phone.text = root.searchResult[1];
+            label_money.text = root.searchResult[2];
+        }
+    }
+
     Text {
         id: text1
         x: 56
@@ -57,7 +69,7 @@ Rectangle{
         id: label_money
         x: 154
         y: 205
-        text: qsTr("xx")
+        text: qsTr("100.33")
     }
 
     TextEdit {
@@ -66,7 +78,7 @@ Rectangle{
         y: 56
         width: 80
         height: 16
-        text: qsTr("输入消费金额")
+        text: qsTr("3.3")
         font.pixelSize: 12
     }
 
@@ -75,6 +87,7 @@ Rectangle{
         x: 246
         y: 51
         text: qsTr("识别指纹")
+        onClicked: root.recogFinger();
     }
 
     Button {
@@ -82,6 +95,17 @@ Rectangle{
         x: 72
         y: 294
         text: qsTr("确认消费")
+        onClicked: {
+            var originMoney = parseFloat(label_money.text)
+            var cost = parseFloat(textEdit_cost.text)
+            var currentMoney = originMoney - cost;
+            if(currentMoney < 0){
+                console.log("no enough money");
+                return;
+            }
+            label_money.text = currentMoney.toFixed(1)
+            root.updateMoney(label_phone.text, label_money.text);
+        }
     }
 
     Button {

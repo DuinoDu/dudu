@@ -16,9 +16,9 @@ public:
 
     Q_INVOKABLE int insertNew(QString name, QString phone, QString money, QString fingerID2, QString password, QString fingerID1);
 
-    Q_INVOKABLE void select(QString fingerID, QList<QString>& result);
+    Q_INVOKABLE QList<QString> select(QString fingerID);
 
-    Q_INVOKABLE void update(QString phone, QString money);
+    Q_INVOKABLE void updateMoney(QString phone, QString money);
 
     Q_INVOKABLE void hello();
 
