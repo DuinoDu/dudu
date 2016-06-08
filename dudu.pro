@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets sql
+QT += qml quick widgets sql serialport
 
 CONFIG += c++11
 
