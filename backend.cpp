@@ -110,6 +110,26 @@ void Backend::updateMoney(QString phone, QString money)
 }
 
 
+QString Backend::createFinger()
+{
+    QString fingerID;
+
+    fingerID = rec.createFinger();
+
+    return fingerID;
+}
+
+
+QString Backend::recogFinger()
+{
+    QString fingerID;
+
+    fingerID = rec.recogFinger();
+
+    return fingerID;
+}
+
+
 void Backend::hello(){
     qDebug()<< "Hello, DuDu";
 }

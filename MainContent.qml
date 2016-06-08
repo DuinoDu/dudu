@@ -16,14 +16,23 @@ Item {
         anchors.fill: parent
         anchors.margins: 4
         currentIndex: 1
+
         Tab {
             title: "开户"
             CreateTab{
                 anchors.fill: parent
                 onSaveClicked: db.insertNew(name, phone, money, password, finger1, finger2)
+                onCreateFinger: {
+                    if (flag === 0){
+                        fingerID1 = db.createFinger();
+                    }else{
+                        fingerID2 = db.createFinger();
+                    }
+                }
             }
-
         }
+
+
         Tab {
             title: "消费"
             CostTab{
@@ -31,8 +40,13 @@ Item {
                 onRecogFinger: {
                     console.log("put your finger on the plane");
 
-                    // search database
-                    searchResult = db.select("1");
+                    var result = db.recogFinger(); // result is string of the fingerID
+                    if(result !== ""){
+                        console.log("find one");
+                        searchResult = db.select(result);
+                    }else {
+                        console.log("no existing finger");
+                    }
                 }
                 onUpdateMoney: {
                     db.updateMoney(phone, money)

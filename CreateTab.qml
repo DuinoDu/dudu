@@ -7,6 +7,11 @@ Rectangle{
 
     signal saveClicked(string name, string phone, string money, string password, string finger1, string finger2)
 
+    signal createFinger(int flag)
+
+    property string fingerID1: ""
+    property string fingerID2: ""
+
     width: 400
     height: 400
 
@@ -72,6 +77,12 @@ Rectangle{
         x: 192
         y: 226
         text: qsTr("创建指纹信息")
+        onClicked: {
+            if (root.fingerID1 === "")
+                root.createFinger(0);
+            else if (root.fingerID2 === "")
+                root.createFinger(1);
+        }
     }
 
     Button {
@@ -85,8 +96,8 @@ Rectangle{
                         textInput_phone.text,
                         textInput_money.text,
                         textInput_password.text,
-                        label_finger1.text,
-                        label_finger2.text);
+                        root.fingerID1, //label_finger1.text,
+                        root.fingerID2); //label_finger2.text);
         }
     }
 
