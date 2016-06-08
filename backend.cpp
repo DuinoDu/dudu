@@ -8,9 +8,12 @@ Backend::Backend(QQuickItem *parent):QQuickItem(parent)
 }
 
 
-int Backend::insertNew(QString name, QString phone, QString money, QString fingerID1, QString fingerID2, QString password)
+int Backend::insertNew(QString name, QString phone, QString money, QString password, QString fingerID1, QString fingerID2)
 {
-    query->prepare("insert into customer(name, phone, money, fingerID1, fingerID2, password)VALUES(:name, :phone, :money, :fingerID, :password)");
+
+    //qDebug() << name << phone << money << password << fingerID1 << fingerID2;
+
+    query->prepare("insert into customer(name, phone, money, fingerID1, fingerID2, password)VALUES(:name, :phone, :money, :fingerID1, :fingerID2, :password)");
     query->bindValue(":name", name);
     query->bindValue(":phone", phone);
     query->bindValue(":money", money);
@@ -20,17 +23,22 @@ int Backend::insertNew(QString name, QString phone, QString money, QString finge
 
 
     if (!query->exec()){
-        qDebug() << "Error: Cannot create a new record in ttm table.";
+        qDebug() << query->lastQuery();
+
+        qDebug() << "Error: Cannot create a new record in customer table.";
         return -1;
     }
 
-    if(!query->exec("select count(*) as currentID from ttm")){
+    if(!query->exec("select count(*) as currentID from customer")){
         qDebug() << "Error: Cannot get currentID";
         return -1;
     }
 
-    if( query->first())
+    if( query->first()){
         QString currentID = query->value(0).toString();
+        //qDebug() << currentID;
+        emit message(1, currentID);
+    }
     return query->value(0).toInt();
 
 }
@@ -87,6 +95,11 @@ void Backend::select(QString fingerID, QList<QString>& result)
 void Backend::update(QString phone, QString money)
 {
     qDebug() << phone << money;
+}
+
+
+void Backend::hello(){
+    qDebug()<< "Hello, DuDu";
 }
 
 

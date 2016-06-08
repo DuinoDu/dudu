@@ -6,5 +6,6 @@
         <file>AddTab.qml</file>
         <file>MainContent.qml</file>
         <file>ui/Input_DD.qml</file>
+        <file>ui/MessageBox_DD.qml</file>
     </qresource>
 </RCC>

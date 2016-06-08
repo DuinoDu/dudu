@@ -5,7 +5,7 @@ import "ui/"
 Rectangle{
     id: root
 
-    signal saveClicked(string name, string phone, string money, string passward, string finger1, string finger2)
+    signal saveClicked(string name, string phone, string money, string password, string finger1, string finger2)
 
     width: 400
     height: 400
