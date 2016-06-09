@@ -4,6 +4,7 @@
 #include <QQuickItem>
 #include <QtSql>
 #include <QDebug>
+#include "fingerrecog.h"
 
 class Backend : public QQuickItem
 {
@@ -44,7 +45,7 @@ private:
     QSqlDatabase db;
     QSqlQuery *query;
 
-    FingerRecog *rec;
+    FingerRecog rec;
 
     void _initDataBase();
 

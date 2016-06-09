@@ -16,12 +16,13 @@ Rectangle{
     radius: 4
 
     TextInput {
-        id: textInput_name
+        id: textInput
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 4
         anchors.right:parent.right
         text: root.text
+        onTextChanged: root.text = textInput.text
         font.pixelSize: 16
         selectByMouse: true
         echoMode: root.inputType === 0 ? TextInput.Normal : TextInput.Password

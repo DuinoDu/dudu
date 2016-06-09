@@ -11,7 +11,7 @@ Backend::Backend(QQuickItem *parent):QQuickItem(parent)
 int Backend::insertNew(QString name, QString phone, QString money, QString password, QString fingerID1, QString fingerID2)
 {
 
-    //qDebug() << name << phone << money << password << fingerID1 << fingerID2;
+    qDebug() << name << phone << money << password << fingerID1 << fingerID2;
 
     query->prepare("insert into customer(name, phone, money, fingerID1, fingerID2, password)VALUES(:name, :phone, :money, :fingerID1, :fingerID2, :password)");
     query->bindValue(":name", name);

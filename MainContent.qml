@@ -42,8 +42,9 @@ Item {
 
                     var result = db.recogFinger(); // result is string of the fingerID
                     if(result !== ""){
-                        console.log("find one");
+                        console.log("find one : "+result);
                         searchResult = db.select(result);
+                        console.log(searchResult);
                     }else {
                         console.log("no existing finger");
                     }

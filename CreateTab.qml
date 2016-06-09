@@ -112,14 +112,14 @@ Rectangle{
         id: label_finger1
         x: 139
         y: 231
-        text: qsTr("1")
+        text: root.fingerID1
     }
 
     Label {
         id: label_finger2
-        x: 150
+        x: 170
         y: 231
-        text: qsTr("2")
+        text: root.fingerID2
     }
 
     Text {
