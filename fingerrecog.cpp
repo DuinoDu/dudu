@@ -5,39 +5,14 @@
 
 FingerRecog::FingerRecog()
 {
-    // init serial and open serial
-    auto config = _readConfigFile();
-    if(config.length() == 0){
-        currentPortName = "COM5";
-    }
-    else{
-        currentPortName = config.at(0);
-    }
-
-    serial.setPortName(currentPortName);
-    serial.setBaudRate(QSerialPort::Baud57600);
-
-    if (!serial.open(QIODevice::ReadWrite)) {
-        qDebug() << (tr("Can't open %1, error code %2").arg(currentPortName).arg(serial.error()));
-        return;
-    }
-
-    // base data for requestData
-    requestData.resize(7);
-    requestData[0] = 0xef;
-    requestData[1] = 0x01;
-    requestData[2] = 0xff;
-    requestData[3] = 0xff;
-    requestData[4] = 0xff;
-    requestData[5] = 0xff;
-    requestData[6] = 0x01;
 }
 
 
 QString FingerRecog::createFinger()
 {
 
-    _init(port);
+    QSerialPort serial;
+    _initSerialPort(serial);
 
     qDebug() << "start to createFinger...";
 
@@ -52,30 +27,30 @@ QString FingerRecog::createFinger()
 
         switch (state) {
         case 0:{
-            if( _genImg() == 0) state = 1;
+            if( _genImg(serial) == 0) state = 1;
             break;
         }
 
         case 1:{
-            if( _img2Tz(0x01) == 0) state = 2;
+            if( _img2Tz(0x01, serial) == 0) state = 2;
             else state = 0;
             break;
         }
 
         case 2:{
-            if( _genImg() == 0) state = 3;
+            if( _genImg(serial) == 0) state = 3;
             break;
         }
 
         case 3:{
-            if( _img2Tz(0x02) == 0) state = 4;
+            if( _img2Tz(0x02, serial) == 0) state = 4;
             else state = 2;
             break;
         }
 
         case 4:{
             int score;
-            if( _match(score) == 0){
+            if( _match(score, serial) == 0){
                 if(score > 100) state = 5;
                 else state = 10; // error
             }
@@ -83,14 +58,14 @@ QString FingerRecog::createFinger()
         }
 
         case 5:{
-            if( _regModel() ==0) state = 6;
+            if( _regModel(serial) ==0) state = 6;
             else state = 10;
             break;
         }
 
         case 6: {
             int templateNum = 0;
-            if( _templateNum(templateNum) != 0)
+            if( _templateNum(templateNum, serial) != 0)
                state = 10;
 
             if(templateNum > 1024){
@@ -103,7 +78,7 @@ QString FingerRecog::createFinger()
 
             _int2uchars(templateNum, addressH, addressL);
 
-            if( _store(addressH, addressL) == 0) {
+            if( _store(addressH, addressL, serial) == 0) {
                 success = true;
                 fingerID = QString::number(templateNum,10);
             }
@@ -129,6 +104,9 @@ QString FingerRecog::createFinger()
 
 QString FingerRecog::recogFinger()
 {
+    QSerialPort serial;
+    _initSerialPort(serial);
+
     qDebug() << "start to search...";
 
     QString fingerID;
@@ -139,12 +117,12 @@ QString FingerRecog::recogFinger()
     while(!success) {
         switch (state) {
         case 0:{
-            if( _genImg() == 0) state = 1;
+            if( _genImg(serial) == 0) state = 1;
             break;
         }
 
         case 1:{
-            if( _img2Tz(0x01) == 0) state = 2;
+            if( _img2Tz(0x01, serial) == 0) state = 2;
             else state = 0;
             break;
         }
@@ -152,7 +130,7 @@ QString FingerRecog::recogFinger()
         case 2:{
             // get amount of all finger template
             int templateNum = 0;
-            if( _templateNum(templateNum) != 0)
+            if( _templateNum(templateNum, serial) != 0)
                state = 10;
 
             if(templateNum > 1024){
@@ -166,7 +144,7 @@ QString FingerRecog::recogFinger()
             // search
             int foundID, score;
 
-            if( _search(pageNumberH, pageNumberL, foundID, score) == 0) {
+            if( _search(pageNumberH, pageNumberL, foundID, score, serial) == 0) {
                 if( score >= 100){
                     fingerID = QString::number(foundID, 10);
                 }
@@ -194,7 +172,7 @@ QString FingerRecog::recogFinger()
 }
 
 
-uchar FingerRecog::_genImg()
+uchar FingerRecog::_genImg(QSerialPort& serial)
 {
     requestData.resize(12);
 
@@ -206,12 +184,12 @@ uchar FingerRecog::_genImg()
     requestData[10] = 0x00;
     requestData[11] = 0x05;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     return uchar(response.at(9)); // 00 success; 02 no finger; 03 failed
 }
 
 
-uchar FingerRecog::_img2Tz(uchar bufferID)
+uchar FingerRecog::_img2Tz(uchar bufferID, QSerialPort& serial)
 {
     requestData.resize(13);
 
@@ -224,7 +202,7 @@ uchar FingerRecog::_img2Tz(uchar bufferID)
     requestData[11] = 0x00;
     requestData[12] = 0x07 + bufferID;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
 
     qDebug() << uchar(response.at(9));
 
@@ -232,7 +210,7 @@ uchar FingerRecog::_img2Tz(uchar bufferID)
 }
 
 
-uchar FingerRecog::_match(int& score)
+uchar FingerRecog::_match(int& score, QSerialPort& serial)
 {
     requestData.resize(12);
 
@@ -244,13 +222,13 @@ uchar FingerRecog::_match(int& score)
     requestData[10] = 0x00;
     requestData[11] = 0x07;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     score = uchar(response.at(10)) * 256 + uchar(response.at(11));
     return uchar(response.at(9)); // 00 success; 08 match fail
 }
 
 
-uchar FingerRecog::_regModel()
+uchar FingerRecog::_regModel(QSerialPort& serial)
 {
     requestData.resize(12);
 
@@ -262,12 +240,12 @@ uchar FingerRecog::_regModel()
     requestData[10] = 0x00;
     requestData[11] = 0x09;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     return uchar(response.at(9)); // 00 success; 0a(十进制下的10) fail
 }
 
 
-uchar FingerRecog::_store(const uchar addressH, const uchar addressL)
+uchar FingerRecog::_store(const uchar addressH, const uchar addressL, QSerialPort& serial)
 {
     requestData.resize(15);
 
@@ -287,12 +265,12 @@ uchar FingerRecog::_store(const uchar addressH, const uchar addressL)
     requestData[13] = sumH;
     requestData[14] = sumL;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     return uchar(response.at(9)); // 00 success; 0b(十进制下的11) PageID exceed, 0x18(十进制下的24) error writing Flash
 }
 
 
-uchar FingerRecog::_search(const uchar pageNumberH, const uchar pageNumberL, int& found, int& score)
+uchar FingerRecog::_search(const uchar pageNumberH, const uchar pageNumberL, int& found, int& score, QSerialPort& serial)
 {
     requestData.resize(17);
 
@@ -314,14 +292,14 @@ uchar FingerRecog::_search(const uchar pageNumberH, const uchar pageNumberL, int
     requestData[15] = sumH;
     requestData[16] = sumL;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     found = uchar(response.at(10)) * 256 + uchar(response.at(11));
     score = uchar(response.at(12)) * 256 + uchar(response.at(13));
     return uchar(response.at(9)); // 00 success; 0b(十进制下的11) PageID exceed, 0x18(十进制下的24) error writing Flash
 }
 
 
-uchar FingerRecog::_templateNum(int& templateNum)
+uchar FingerRecog::_templateNum(int& templateNum, QSerialPort& serial)
 {
     requestData.resize(12);
 
@@ -333,13 +311,13 @@ uchar FingerRecog::_templateNum(int& templateNum)
     requestData[10] = 0x00;
     requestData[11] = 0x21;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     templateNum = uchar(response.at(10)) * 256 + uchar(response.at(11));
     return uchar(response.at(9)); // 00 success;
 }
 
 
-uchar FingerRecog::_clear()
+uchar FingerRecog::_clear(QSerialPort& serial)
 {
     requestData.resize(12);
 
@@ -351,12 +329,12 @@ uchar FingerRecog::_clear()
     requestData[10] = 0x00;
     requestData[11] = 0x11;
 
-    QByteArray response = _readwriteSerial(requestData);
+    QByteArray response = _readwriteSerial(requestData, serial);
     return uchar(response.at(9)); // 00 success; 0x11(17) failed
 }
 
 
-void FingerRecog::_test()
+void FingerRecog::_test(QSerialPort& serial)
 {
     requestData.resize(16);
 
@@ -372,11 +350,12 @@ void FingerRecog::_test()
     requestData[14] = 0x00;
     requestData[15] = 0x1b; // sum of 01 + 07 + 13 = 1b
 
-    QByteArray responseData = _readwriteSerial(requestData);
+    QByteArray responseData = _readwriteSerial(requestData, serial);
     qDebug() << responseData;
 }
 
-QByteArray FingerRecog::_readwriteSerial(QByteArray requestData)
+
+QByteArray FingerRecog::_readwriteSerial(QByteArray requestData, QSerialPort& serial)
 {
     serial.write(requestData);
 
@@ -418,8 +397,8 @@ void FingerRecog::_int2uchars(int templateNum, uchar& addressH, uchar& addressL)
 }
 
 
-/*
-void FingerRecog::_init(QSerialPort& serial)
+
+void FingerRecog::_initSerialPort(QSerialPort& serial)
 {
     // init serial and open serial
     auto config = _readConfigFile();
@@ -448,4 +427,3 @@ void FingerRecog::_init(QSerialPort& serial)
     requestData[5] = 0xff;
     requestData[6] = 0x01;
 }
-*/
