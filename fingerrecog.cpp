@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-FingerRecog::FingerRecog(QObject *parent) : QObject(parent)
+FingerRecog::FingerRecog()
 {
     // init serial and open serial
     auto config = _readConfigFile();
@@ -37,6 +37,8 @@ FingerRecog::FingerRecog(QObject *parent) : QObject(parent)
 QString FingerRecog::createFinger()
 {
 
+    _init(port);
+
     qDebug() << "start to createFinger...";
 
     QString fingerID;
@@ -44,10 +46,9 @@ QString FingerRecog::createFinger()
     int state = 0;
     bool success = false;
 
-
     while( !success ){
 
-        //qDebug() << state;
+        qDebug() << state;
 
         switch (state) {
         case 0:{
@@ -120,7 +121,7 @@ QString FingerRecog::createFinger()
         }
     }
 
-    //if(fingerID.length() != 0) qDebug() << "Success, fingerID is" << fingerID;
+    if(fingerID.length() != 0) qDebug() << "Success, fingerID is" << fingerID;
 
     return fingerID;
 }
@@ -415,3 +416,36 @@ void FingerRecog::_int2uchars(int templateNum, uchar& addressH, uchar& addressL)
     addressH = uchar(templateNum / 256);
     addressL = uchar(templateNum % 256);
 }
+
+
+/*
+void FingerRecog::_init(QSerialPort& serial)
+{
+    // init serial and open serial
+    auto config = _readConfigFile();
+    if(config.length() == 0){
+        currentPortName = "COM5";
+    }
+    else{
+        currentPortName = config.at(0);
+    }
+
+    serial.setPortName(currentPortName);
+    serial.setBaudRate(QSerialPort::Baud57600);
+
+    if (!serial.open(QIODevice::ReadWrite)) {
+        qDebug() << (tr("Can't open %1, error code %2").arg(currentPortName).arg(serial.error()));
+        return;
+    }
+
+    // base data for requestData
+    requestData.resize(7);
+    requestData[0] = 0xef;
+    requestData[1] = 0x01;
+    requestData[2] = 0xff;
+    requestData[3] = 0xff;
+    requestData[4] = 0xff;
+    requestData[5] = 0xff;
+    requestData[6] = 0x01;
+}
+*/

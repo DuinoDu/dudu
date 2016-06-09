@@ -18,17 +18,21 @@ Item {
         currentIndex: 1
 
         Tab {
+            id: tab1
             title: "开户"
             CreateTab{
                 width: root.width; height: root.height
                 onSaveClicked: db.insertNew(name, phone, money, password, finger1, finger2)
                 onCreateFinger: {
-                    if (flag === 0){
-                        fingerID1 = db.createFinger();
-                    }else{
-                        fingerID2 = db.createFinger();
-                    }
+                    db.createFinger(); // multi thread
                 }
+            }
+
+            function setFingerID(fingerID){
+                if (tab1.childAt(10,10).flag === 0)
+                    tab1.childAt(10,10).fingerID1 = fingerID;
+                else
+                    tab1.childAt(10,10).fingerID2 = fingerID;
             }
         }
 
@@ -85,6 +89,8 @@ Item {
     Backend{
         id: db
         onMessage: root.showMessage(flag, msg)
+        onCreateReady: tab1.setFingerID(fingerID)
+        //onSearchReady: tab1.setFingerID(fingerID)
     }
 
     function showMessage(flag, msg){

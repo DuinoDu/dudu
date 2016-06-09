@@ -4,7 +4,9 @@
 Backend::Backend(QQuickItem *parent):QQuickItem(parent)
 {
     _initDataBase();
-
+    fingerTh = new FingerThread(rec);
+    connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
+    connect(fingerTh, SIGNAL(searchReady(QString)), this, SIGNAL(searchReady(QString)));
 }
 
 
@@ -110,23 +112,18 @@ void Backend::updateMoney(QString phone, QString money)
 }
 
 
-QString Backend::createFinger()
+void Backend::createFinger()
 {
-    QString fingerID;
-
-    fingerID = rec.createFinger();
-
-    return fingerID;
+    qDebug() << "start multi thead for create finge...";
+    fingerTh->flag = 1;
+    fingerTh->start();
 }
 
 
-QString Backend::recogFinger()
+void Backend::recogFinger()
 {
-    QString fingerID;
-
-    fingerID = rec.recogFinger();
-
-    return fingerID;
+    fingerTh->flag = 2;
+    fingerTh->start();
 }
 
 

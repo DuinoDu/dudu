@@ -8,7 +8,7 @@ class FingerRecog : public QObject
 {
     Q_OBJECT
 public:
-    explicit FingerRecog(QObject *parent = 0);
+    FingerRecog();
 
     QString createFinger();
 
@@ -20,9 +20,11 @@ public slots:
 
 private:
     QSerialPort serial;
+    QByteArray requestData;
+
     QString currentPortName = "COM5";
     int waitTimeout = 1000;
-    QByteArray requestData;
+
 
     uchar _genImg();
     uchar _img2Tz(uchar bufferID = 0x01);

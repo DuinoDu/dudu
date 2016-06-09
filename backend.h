@@ -3,8 +3,38 @@
 
 #include <QQuickItem>
 #include <QtSql>
+#include <QThread>
 #include <QDebug>
 #include "fingerrecog.h"
+
+
+class FingerThread : public QThread
+{
+    Q_OBJECT
+public:
+    FingerThread(FingerRecog& rec):rec(&rec){}
+    int flag = 0;
+
+signals:
+    void createReady(QString fingerID);
+    void searchReady(QString fingerID);
+
+private:
+    FingerRecog *rec;
+
+    void run() Q_DECL_OVERRIDE{
+        QString fingerID;
+        if(flag == 1){
+            fingerID = rec->createFinger();
+            emit createReady(fingerID);
+        }
+        else if(flag == 2){
+            fingerID = rec->recogFinger();
+            emit searchReady(fingerID);
+        }
+    }
+};
+
 
 class Backend : public QQuickItem
 {
@@ -21,9 +51,9 @@ public:
 
     Q_INVOKABLE void updateMoney(QString phone, QString money);
 
-    Q_INVOKABLE QString createFinger();
+    Q_INVOKABLE void createFinger();
 
-    Q_INVOKABLE QString recogFinger();
+    Q_INVOKABLE void recogFinger();
 
     Q_INVOKABLE void hello();
 
@@ -36,6 +66,8 @@ public:
 signals:
     void deltaChanged();
     void message(int flag, QString msg);
+    void createReady(QString fingerID);
+    void searchReady(QString fingerID);
 
 public slots:
 
@@ -46,6 +78,7 @@ private:
     QSqlQuery *query;
 
     FingerRecog rec;
+    FingerThread *fingerTh;
 
     void _initDataBase();
 
