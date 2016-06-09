@@ -7,5 +7,17 @@
         <file>MainContent.qml</file>
         <file>ui/Input_DD.qml</file>
         <file>ui/MessageBox_DD.qml</file>
+        <file>ui/Button_DD.qml</file>
+        <file>img/finger_off.png</file>
+        <file>img/finger_on.png</file>
+        <file>img/money.png</file>
+        <file>img/money1.png</file>
+        <file>img/ok.png</file>
+        <file>img/password.png</file>
+        <file>img/phone.png</file>
+        <file>img/speaker_off.png</file>
+        <file>img/speaker_on.png</file>
+        <file>img/username.png</file>
+        <file>img/username1.png</file>
     </qresource>
 </RCC>

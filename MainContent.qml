@@ -8,7 +8,7 @@ import "ui/"
 
 Item {
     id: root
-    width: 640
+    width: 800
     height: 480
 
     TabView {
@@ -20,7 +20,7 @@ Item {
         Tab {
             title: "开户"
             CreateTab{
-                anchors.fill: parent
+                width: root.width; height: root.height
                 onSaveClicked: db.insertNew(name, phone, money, password, finger1, finger2)
                 onCreateFinger: {
                     if (flag === 0){
@@ -36,7 +36,6 @@ Item {
         Tab {
             title: "消费"
             CostTab{
-                anchors.fill: parent
                 onRecogFinger: {
                     console.log("put your finger on the plane");
 

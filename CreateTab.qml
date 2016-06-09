@@ -12,131 +12,236 @@ Rectangle{
     property string fingerID1: ""
     property string fingerID2: ""
 
-    width: 400
-    height: 400
+    width: 800
+    height: 500
 
-    Text {
-        id: text1
-        x: 69
-        y: 65
-        text: qsTr("姓名")
-        font.pixelSize: 12
+    Image{
+        x: 287
+        y: 38
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/username1.png"
     }
 
-    Text {
-        id: text2
-        x: 63
-        y: 101
-        text: qsTr("手机号")
-        font.pixelSize: 12
+    Image{
+        x: 77
+        y: 100
+        width: 24
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/phone.png"
     }
 
-    Text {
-        id: text3
-        x: 57
-        y: 139
-        width: 48
-        height: 16
-        text: qsTr("初始金额")
-        font.pixelSize: 12
+    Image{
+        x: 66
+        y: 160
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/money.png"
     }
 
-    Text {
-        id: text4
-        x: 57
-        y: 232
-        text: qsTr("指纹状态")
-        font.pixelSize: 12
+    Image{
+        x: 66
+        y: 220
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/password.png"
     }
+
+    Image{
+        id: finger1
+        x: 178
+        y: 303
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: 50
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: root.fingerID1 === "" ? "./img/finger_off.png" : "./img/finger_on.png"
+
+        MouseArea{
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            enabled: root.fingerID1==="" ? true : false
+            hoverEnabled: true
+            onEntered: {
+                finger1.width *= 1.2;
+                finger1.height *= 1.2;
+            }
+            onExited: {
+                finger1.width /= 1.2;
+                finger1.height /= 1.2;
+            }
+            onClicked: root.createFinger(0)
+        }
+    }
+
+    Image{
+        id: finger2
+        x: 100
+        y: 303
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -50
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: root.fingerID2 === "" ? "./img/finger\_off.png" : "./img/finger_on.png"
+
+        MouseArea{
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            hoverEnabled: true
+            enabled: root.fingerID2==="" ? true : false
+            onEntered: {
+                finger2.width *= 1.2;
+                finger2.height *= 1.2;
+            }
+            onExited: {
+                finger2.width /= 1.2;
+                finger2.height /= 1.2;
+            }
+            onClicked: root.createFinger(1)
+        }
+    }
+
 
     Input_DD{
         id: textInput_name
-        x: 132
-        y: 56
-        text: qsTr("dd")
+        x: 350
+        y: 35
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: "姓名"
+        re: "[^\u0000-\u00FF]" // 中文
     }
-
 
     Input_DD {
         id: textInput_phone
-        x: 132
-        y: 92
-        text: qsTr("12812345678")
+        x: 139
+        y: 100
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: "电话号码"
+        re: "^1\\d{10}$"
     }
 
     Input_DD {
         id: textInput_money
-        x: 132
-        y: 132
-
-        text: qsTr("100.0")
+        x: 139
+        y: 160
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: "充值金额"
+        re: "[^\d.]"
     }
 
-    Button {
-        id: button_createFinger
-        x: 192
-        y: 226
-        text: qsTr("创建指纹信息")
-        onClicked: {
-            if (root.fingerID1 === "")
-                root.createFinger(0);
-            else if (root.fingerID2 === "")
-                root.createFinger(1);
-        }
+    Input_DD {
+        id: textInput_password
+        x: 139
+        y: 220
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: "密码"
+        echoMode: TextInput.Password
+        re: "^\\d{6}$"
     }
 
-    Button {
+    Button_DD{
         id: button_ok
-        x: 57
-        y: 293
-        text: qsTr("确定")
+        x: 66
+        y: 373
+        text: qsTr("确  定")
+        anchors.horizontalCenterOffset: -80
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 115; height: 40
+        radius: 20
+        border.color: "#80C342"
+        fontColor: "#80C342"
+        fontSize: 18
+        fontFamily: "SimSun"
         onClicked: {
             root.saveClicked(
                         textInput_name.text,
                         textInput_phone.text,
                         textInput_money.text,
                         textInput_password.text,
-                        root.fingerID1, //label_finger1.text,
-                        root.fingerID2); //label_finger2.text);
+                        root.fingerID1,
+                        root.fingerID2);
         }
     }
 
-    Button {
+    Button_DD{
         id: button_cancel
-        x: 177
-        y: 293
-        text: qsTr("取消")
+        x: 224
+        y: 373
+        text: qsTr("取  消")
+        anchors.horizontalCenterOffset: 80
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 115; height: 40
+        radius: 20
+        border.color: "#80C342"
+        fontColor: "#80C342"
+        fontSize: 18
+        fontFamily: "SimSun"
+        onClicked: {
+            textInput_name.text = "";
+            textInput_phone.text = "";
+            textInput_money.text = "";
+            textInput_password.text = "";
+            root.fingerID1 = "";
+            root.fingerID2 = "";
+        }
     }
 
-    Label {
-        id: label_finger1
-        x: 139
-        y: 231
-        text: root.fingerID1
+
+    Image{
+        y: 38
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: 167
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: textInput_name.inputCorrect ? "./img/ok.png" : ""
     }
 
-    Label {
-        id: label_finger2
-        x: 170
-        y: 231
-        text: root.fingerID2
+    Image {
+        x: 8
+        y: 100
+        width: 45
+        height: 45
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: 167
+        source: textInput_phone.inputCorrect ? "./img/ok.png" : ""
     }
 
-    Text {
-        id: text5
-        x: 57
-        y: 184
-        width: 48
-        height: 16
-        text: qsTr("密码")
-        font.pixelSize: 12
+    Image {
+        x: -4
+        y: 160
+        width: 45
+        height: 45
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: 167
+        source: textInput_money.inputCorrect ? "./img/ok.png" : ""
     }
 
-    Input_DD {
-        id: textInput_password
-        x: 132
-        y: 177
-        text: qsTr("123456")
-        inputType: 1
+    Image {
+        x: -4
+        y: 223
+        width: 45
+        height: 45
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: 167
+        source: textInput_password.inputCorrect ? "./img/ok.png" : ""
     }
+
 }
