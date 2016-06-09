@@ -1,14 +1,17 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.3
+import "ui/"
 
 Rectangle{
     id: root
-    width: 400
-    height: 400
+    width: 800
+    height: 500
     color: "#dddddd"
 
     signal recogFinger()
     signal updateMoney(string phone, string money)
+
+    property string fingerID: ""
 
     property variant searchResult: []
     onSearchResultChanged: {
@@ -19,82 +22,129 @@ Rectangle{
         }
     }
 
-    Text {
-        id: text1
-        x: 56
-        y: 56
-        text: qsTr("消费金额")
-        font.pixelSize: 12
+    Image{
+        x: 287
+        y: 198
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/username1.png"
     }
 
-    Text {
-        id: text2
-        x: 56
-        y: 118
-        text: qsTr("消费者")
-        font.pixelSize: 12
+    Image{
+        x: 77
+        y: 258
+        width: 24
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/phone.png"
     }
 
-    Text {
-        id: text3
-        x: 56
-        y: 160
-        text: qsTr("手机号")
-        font.pixelSize: 12
+    Image{
+        x: 66
+        y: 318
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/money.png"
     }
 
-    Text {
-        id: text4
-        x: 56
-        y: 205
-        text: qsTr("账户余额")
-        font.pixelSize: 12
+    Image{
+        x: 66
+        y: 53
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "./img/rmb.png"
     }
 
-    Label {
+
+
+    Input_DD {
         id: label_name
         x: 154
-        y: 118
-        text: qsTr("xx")
+        y: 195
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: qsTr("姓名")
+        enabled: false
     }
 
-    Label {
+    Input_DD {
         id: label_phone
         x: 154
-        y: 155
-        text: qsTr("xx")
+        y: 255
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: qsTr("电话号码")
+        enabled: false
     }
 
-    Label {
+    Input_DD {
         id: label_money
         x: 154
-        y: 205
-        text: qsTr("100.33")
+        y: 315
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: qsTr("余额")
+        enabled: false
     }
 
-    TextEdit {
+    Input_DD {
         id: textEdit_cost
         x: 123
-        y: 56
-        width: 80
-        height: 16
-        text: qsTr("3.3")
-        font.pixelSize: 12
+        y: 50
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: "消费金额"
     }
 
-    Button {
+    Image{
         id: button_recognition
-        x: 246
-        y: 51
-        text: qsTr("识别指纹")
-        onClicked: root.recogFinger();
+        x: 384
+        y: 123
+        width: 45
+        height: 45
+        anchors.horizontalCenter: parent.horizontalCenter
+        source:  root.fingerID === "" ? "./img/finger_off.png" : "./img/finger_on.png"
+
+        MouseArea{
+            anchors.rightMargin: 0
+            anchors.bottomMargin: -2
+            anchors.leftMargin: 0
+            anchors.topMargin: 2
+            anchors.fill: parent
+            enabled: (root.fingerID==="") ? true : false
+            hoverEnabled: true
+            onEntered: {
+                button_recognition.width *= 1.2;
+                button_recognition.height *= 1.2;
+            }
+            onExited: {
+                button_recognition.width /= 1.2;
+                button_recognition.height /= 1.2;
+            }
+            onClicked: root.recogFinger()
+        }
     }
 
-    Button {
+    Button_DD {
         id: button_ok
-        x: 72
-        y: 294
+        x: 249
+        y: 408
         text: qsTr("确认消费")
+        anchors.horizontalCenterOffset: -80
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 115; height: 40
+        radius: 20
+        border.color: "#80C342"
+        fontColor: "#80C342"
+        fontSize: 18
+        fontFamily: "SimSun"
         onClicked: {
             var originMoney = parseFloat(label_money.text)
             var cost = parseFloat(textEdit_cost.text)
@@ -108,10 +158,23 @@ Rectangle{
         }
     }
 
-    Button {
+    Button_DD {
         id: button_cancel
-        x: 204
-        y: 294
-        text: qsTr("取消")
+        text: qsTr("取  消")
+        anchors.top: button_ok.top
+        anchors.topMargin: 0
+        anchors.left: button_ok.right
+        anchors.leftMargin: 40
+        width: 115; height: 40
+        radius: 20
+        border.color: "#80C342"
+        fontColor: "#80C342"
+        fontSize: 18
+        fontFamily: "SimSun"
+        onClicked:{
+            fingerID = ""
+            searchResult = []
+        }
+
     }
 }

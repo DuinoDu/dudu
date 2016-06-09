@@ -24,37 +24,43 @@ Item {
                 width: root.width; height: root.height
                 onSaveClicked: db.insertNew(name, phone, money, password, finger1, finger2)
                 onCreateFinger: {
-                    db.createFinger(); // multi thread
+                    db.createFinger();
                 }
             }
 
             function setFingerID(fingerID){
-                if (tab1.childAt(10,10).flag === 0)
+                if (tab1.childAt(10,10).flag === 1)
                     tab1.childAt(10,10).fingerID1 = fingerID;
-                else
+                else if(tab1.childAt(10,10).flag === 2)
                     tab1.childAt(10,10).fingerID2 = fingerID;
             }
         }
 
 
         Tab {
+            id: tab2
             title: "消费"
             CostTab{
                 onRecogFinger: {
                     console.log("put your finger on the plane");
-
-                    var result = db.recogFinger(); // result is string of the fingerID
-                    if(result !== ""){
+                    db.recogFinger();
+                }
+                onUpdateMoney: {
+                    db.updateMoney(phone, money)
+                }
+                onFingerIDChanged: {
+                    var result = Number(fingerID);
+                    if(result >= 0){
                         console.log("find one : "+result);
-                        searchResult = db.select(result);
+                        searchResult = db.select(fingerID);
                         console.log(searchResult);
                     }else {
                         console.log("no existing finger");
                     }
                 }
-                onUpdateMoney: {
-                    db.updateMoney(phone, money)
-                }
+            }
+            function setFingerID(fingerID){
+                tab2.childAt(10,10).fingerID = fingerID;
             }
         }
         Tab {
@@ -90,7 +96,7 @@ Item {
         id: db
         onMessage: root.showMessage(flag, msg)
         onCreateReady: tab1.setFingerID(fingerID)
-        //onSearchReady: tab1.setFingerID(fingerID)
+        onSearchReady: tab2.setFingerID(fingerID)
     }
 
     function showMessage(flag, msg){

@@ -3,9 +3,7 @@
 
 #include <QDebug>
 
-FingerRecog::FingerRecog()
-{
-}
+FingerRecog::FingerRecog(){}
 
 
 QString FingerRecog::createFinger()
@@ -54,6 +52,8 @@ QString FingerRecog::createFinger()
                 if(score > 100) state = 5;
                 else state = 10; // error
             }
+            else
+                state = 10;
             break;
         }
 
@@ -115,6 +115,9 @@ QString FingerRecog::recogFinger()
     bool success = false;
 
     while(!success) {
+
+        qDebug() << state;
+
         switch (state) {
         case 0:{
             if( _genImg(serial) == 0) state = 1;
@@ -155,6 +158,7 @@ QString FingerRecog::recogFinger()
             }
             else
                 state = 10;
+
             break;
         }
 
@@ -168,6 +172,7 @@ QString FingerRecog::recogFinger()
         }
     }
 
+    qDebug() << "fingerID" << fingerID;
     return fingerID;
 }
 

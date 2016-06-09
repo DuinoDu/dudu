@@ -48,48 +48,60 @@ int Backend::insertNew(QString name, QString phone, QString money, QString passw
 
 QList<QString> Backend::select(QString fingerID)
 {
+    qDebug() << "fingerID: " << fingerID;
+
     QList<QString> result;
 
     QString filter;
     filter.append("fingerID1=");
-    filter.append("\"");
     filter.append(fingerID);
-    filter.append("\"");
 
     QString selectQuery;
     selectQuery.append("select * from customer where ");
     selectQuery.append(filter);
 
-    if (!query->exec(selectQuery)){
+    if(!query->exec(selectQuery)){
+        qDebug() << "Error while in sql";
+        return result;
+    }
+
+
+    if (!query->next()){
         filter.clear();
         selectQuery.clear();
 
         filter.append("fingerID2=");
-        filter.append("\"");
         filter.append(fingerID);
-        filter.append("\"");
         selectQuery.append("select * from customer where ");
         selectQuery.append(filter);
 
         if(!query->exec(selectQuery)){
-            qDebug() << "select failed.\n";
+            qDebug() << "Error while in sql";
+            return result;
+        }
+
+        if (!query->next()){
+            qDebug() << "select fail";
             return result;
         }
         else{
-            qDebug() << "select success\n";
+            qDebug() << "select success in fingerID2";
         }
     }
     else{
-        qDebug() << "select success\n";
+        qDebug() << "select success in fingerID1";
     }
 
     int nameField = query->record().indexOf("name");
     int phoneField = query->record().indexOf("phone");
-    int money = query->record().indexOf("money");
+    int moneyField = query->record().indexOf("money");
+
     if(query->next()){
         result.append(query->value(nameField).toString());
         result.append(query->value(phoneField).toString());
-        result.append(query->value(money).toString());
+        result.append(query->value(moneyField).toString());
+        qDebug() << "result:" << result;
+        result.clear();
     }
 
     return result;
