@@ -53,7 +53,7 @@ public:
 
     Q_INVOKABLE void createFinger();
 
-    Q_INVOKABLE void recogFinger();
+    Q_INVOKABLE void recogFinger(int flag); // 1 is cost, 2 is add
 
     Q_INVOKABLE void hello();
 
@@ -67,9 +67,10 @@ signals:
     void deltaChanged();
     void message(int flag, QString msg);
     void createReady(QString fingerID);
-    void searchReady(QString fingerID);
+    void searchReady(QString fingerID, int searchType);
 
-public slots:
+private slots:
+    void _setSearchType(QString fingerID);
 
 private:
     qreal m_delta;
@@ -79,6 +80,8 @@ private:
 
     FingerRecog rec;
     FingerThread *fingerTh;
+
+    int _searchType;
 
     void _initDataBase();
 

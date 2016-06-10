@@ -9,6 +9,7 @@ Rectangle {
 	
 	property string text: "default"
     property string fontColor: "#80C342"
+    property string frozenColor: "gray"
     property string fontFamily: "Microsoft YaHei"
 	property int fontSize: 10
 	property bool enableButton: true
@@ -21,7 +22,7 @@ Rectangle {
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.verticalCenter: parent.verticalCenter
 		text: root.text
-		color: root.fontColor
+        color:root.fontColor
 		font.pixelSize: root.fontSize
         font.family: root.fontFamily
 	}

@@ -6,7 +6,7 @@ Backend::Backend(QQuickItem *parent):QQuickItem(parent)
     _initDataBase();
     fingerTh = new FingerThread(rec);
     connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
-    connect(fingerTh, SIGNAL(searchReady(QString)), this, SIGNAL(searchReady(QString)));
+    connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(_setSearchType(QString)));
 }
 
 
@@ -55,6 +55,9 @@ QList<QString> Backend::select(QString fingerID)
     QString filter;
     filter.append("fingerID1=");
     filter.append(fingerID);
+    filter.append(" or ");
+    filter.append("fingerID2=");
+    filter.append(fingerID);
 
     QString selectQuery;
     selectQuery.append("select * from customer where ");
@@ -65,33 +68,6 @@ QList<QString> Backend::select(QString fingerID)
         return result;
     }
 
-
-    if (!query->next()){
-        filter.clear();
-        selectQuery.clear();
-
-        filter.append("fingerID2=");
-        filter.append(fingerID);
-        selectQuery.append("select * from customer where ");
-        selectQuery.append(filter);
-
-        if(!query->exec(selectQuery)){
-            qDebug() << "Error while in sql";
-            return result;
-        }
-
-        if (!query->next()){
-            qDebug() << "select fail";
-            return result;
-        }
-        else{
-            qDebug() << "select success in fingerID2";
-        }
-    }
-    else{
-        qDebug() << "select success in fingerID1";
-    }
-
     int nameField = query->record().indexOf("name");
     int phoneField = query->record().indexOf("phone");
     int moneyField = query->record().indexOf("money");
@@ -100,9 +76,9 @@ QList<QString> Backend::select(QString fingerID)
         result.append(query->value(nameField).toString());
         result.append(query->value(phoneField).toString());
         result.append(query->value(moneyField).toString());
-        qDebug() << "result:" << result;
-        result.clear();
     }
+
+    qDebug() << result;
 
     return result;
 }
@@ -132,10 +108,11 @@ void Backend::createFinger()
 }
 
 
-void Backend::recogFinger()
+void Backend::recogFinger(int flag)
 {
+    _searchType = flag;
     fingerTh->flag = 2;
-    fingerTh->start();
+    fingerTh->start(); 
 }
 
 
@@ -169,4 +146,9 @@ void Backend::_initDataBase()
         qDebug() << "Create table success\n";
     else
         qDebug() << "Create table failed\n";
+}
+
+void Backend::_setSearchType(QString fingerID)
+{
+    emit searchReady(fingerID, _searchType);
 }

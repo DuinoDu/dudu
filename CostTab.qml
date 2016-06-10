@@ -63,6 +63,14 @@ Rectangle{
     }
 
 
+    Image{
+        y: 53
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: 166
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: textEdit_cost.inputCorrect ? "./img/ok.png" : ""
+    }
 
     Input_DD {
         id: label_name
@@ -101,6 +109,7 @@ Rectangle{
         anchors.horizontalCenterOffset: 27
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "消费金额"
+        re: "[^\d.]"
     }
 
     Image{
@@ -145,16 +154,24 @@ Rectangle{
         fontColor: "#80C342"
         fontSize: 18
         fontFamily: "SimSun"
+        enabled: (textEdit_cost.inputCorrect && root.fingerID!=="") ? true : false
         onClicked: {
             var originMoney = parseFloat(label_money.text)
             var cost = parseFloat(textEdit_cost.text)
             var currentMoney = originMoney - cost;
             if(currentMoney < 0){
-                console.log("no enough money");
+                root.showMessage(2, "");
                 return;
             }
+
+            if(currentMoney < 5){
+                root.showMessage(3, "");
+                return;
+            }
+
             label_money.text = currentMoney.toFixed(1)
             root.updateMoney(label_phone.text, label_money.text);
+            root.showMessage(1, "");
         }
     }
 
@@ -174,7 +191,43 @@ Rectangle{
         onClicked:{
             fingerID = ""
             searchResult = []
+            textEdit_cost.text = ""
+            label_name.text = ""
+            label_phone.text = ""
+            label_money.text = ""
         }
 
+    }
+
+    function showMessage(flag, msg){
+        console.log(flag, msg);
+        var msgStr = "";
+
+        // decide message type
+        switch (flag)
+        {
+        case 1:
+            msgStr = "消费成功！";
+            break;
+        case 2:
+            msgStr = "余额不足，请充值！";
+            break;
+
+        case 3:
+            msgStr = "余额不足5元，请尽快充值！";
+            break;
+
+        default:
+            break;
+        }
+
+        // dynamic create component
+        var component = Qt.createComponent("ui/MessageBox_DD.qml");
+        var msgBox = component.createObject(root, {"x": root.width/2 - 150, "y":root.height/2 - 50, "text": msgStr});
+
+        if (msgBox === null) {
+            console.log("Error creating object");
+        }
+        msgBox.destroy(1800);
     }
 }

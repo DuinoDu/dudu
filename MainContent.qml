@@ -23,9 +23,8 @@ Item {
             CreateTab{
                 width: root.width; height: root.height
                 onSaveClicked: db.insertNew(name, phone, money, password, finger1, finger2)
-                onCreateFinger: {
-                    db.createFinger();
-                }
+                onCreateFinger: db.createFinger()
+
             }
 
             function setFingerID(fingerID){
@@ -43,20 +42,15 @@ Item {
             CostTab{
                 onRecogFinger: {
                     console.log("put your finger on the plane");
-                    db.recogFinger();
+                    db.recogFinger(1);
                 }
                 onUpdateMoney: {
                     db.updateMoney(phone, money)
                 }
                 onFingerIDChanged: {
-                    var result = Number(fingerID);
-                    if(result >= 0){
-                        console.log("find one : "+result);
-                        searchResult = db.select(fingerID);
-                        console.log(searchResult);
-                    }else {
-                        console.log("no existing finger");
-                    }
+                    console.log("find one : "+fingerID);
+                    console.log(searchResult);
+                    searchResult = db.select(fingerID);
                 }
             }
             function setFingerID(fingerID){
@@ -64,9 +58,24 @@ Item {
             }
         }
         Tab {
+            id: tab3
             title: "充值"
             AddTab{
-                anchors.fill: parent
+                onRecogFinger: {
+                    console.log("put your finger on the plane");
+                    db.recogFinger(2);
+                }
+                onUpdateMoney: {
+                    db.updateMoney(phone, money)
+                }
+                onFingerIDChanged: {
+                    console.log("find one : "+fingerID);
+                    console.log(searchResult);
+                    searchResult = db.select(fingerID);
+                }
+            }
+            function setFingerID(fingerID){
+                tab3.childAt(10,10).fingerID = fingerID;
             }
         }
 
@@ -96,7 +105,16 @@ Item {
         id: db
         onMessage: root.showMessage(flag, msg)
         onCreateReady: tab1.setFingerID(fingerID)
-        onSearchReady: tab2.setFingerID(fingerID)
+        onSearchReady: {
+            if(fingerID === ""){
+                root.showMessage(2, "");
+                return;
+            }
+            if(searchType === 1)
+                tab2.setFingerID(fingerID);
+            else if(searchType === 2)
+                tab3.setFingerID(fingerID);
+        }
     }
 
     function showMessage(flag, msg){
@@ -109,6 +127,10 @@ Item {
         case 1:
             msgStr = "当前第" + msg + "位会员";
             break;
+        case 2:
+            msgStr = "当前用户不存在";
+            break;
+
         default:
             break;
         }
