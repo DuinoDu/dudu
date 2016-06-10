@@ -23,6 +23,12 @@ Rectangle{
     }
 
     Image{
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        source: "./img/bg1.jpg"
+    }
+
+    Image{
         x: 287
         y: 198
         width: 45

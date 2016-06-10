@@ -16,4 +16,7 @@ QML_IMPORT_PATH =
 
 HEADERS += \
     backend.h \
-    fingerrecog.h
+    fingerrecog.h \
+    splashwidget.h
+
+RC_ICONS = img/icon_48x48.ico

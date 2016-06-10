@@ -3,6 +3,7 @@
 #include <QtQuick/QQuickView>
 
 #include "backend.h"
+#include "splashwidget.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,8 +11,16 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Backend>("DD", 1, 0, "Backend");
 
+
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    SplashWidget screen;
+    screen.setTime(1800);
+    screen.setSplashImgPath(":/img/splash.png");
+    screen.setMainPath("qrc:/main.qml");
+    screen.start();
+
+    QObject::connect(&screen, SIGNAL(closeSplashScreen(QUrl)), &engine, SLOT(load(QUrl)));
 
     return app.exec();
 }

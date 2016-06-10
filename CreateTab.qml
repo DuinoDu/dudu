@@ -21,6 +21,13 @@ Rectangle{
     height: 500
     color: "#dddddd"
 
+
+    Image{
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        source: "./img/bg3.jpg"
+    }
+
     Image{
         x: 77
         y: 53
