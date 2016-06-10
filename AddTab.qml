@@ -25,7 +25,7 @@ Rectangle{
     Image{
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        source: "./img/bg1.jpg"
+        source: "./img/bg5.jpg"
     }
 
     Image{
@@ -35,7 +35,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/username1.png"
+        source: "./img/username.png"
     }
 
     Image{

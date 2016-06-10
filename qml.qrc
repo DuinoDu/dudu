@@ -17,22 +17,17 @@
         <file>img/speaker_off.png</file>
         <file>img/speaker_on.png</file>
         <file>img/username.png</file>
-        <file>img/username1.png</file>
         <file>img/rmb.png</file>
         <file>SplashScreen.qml</file>
         <file>img/splash.png</file>
         <file>img/splashBg.png</file>
         <file>img/icon_48x48.ico</file>
-        <file>img/bg1.jpg</file>
         <file>img/bg2.jpg</file>
-        <file>img/bg3.jpg</file>
-        <file>img/bg4.jpg</file>
         <file>img/bg5.jpg</file>
-        <file>img/bg6.jpg</file>
-        <file>img/bg7.jpg</file>
-        <file>img/bg8.jpg</file>
-        <file>img/bg9.jpg</file>
         <file>img/bg10.jpg</file>
-        <file>img/bg11.jpg</file>
+        <file>img/changeInput.png</file>
+        <file>ui/Assistant_DD.qml</file>
+        <file>img/message.png</file>
+        <file>img/search.png</file>
     </qresource>
 </RCC>

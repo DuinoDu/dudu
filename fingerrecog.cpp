@@ -113,8 +113,13 @@ QString FingerRecog::recogFinger()
 
     int state = 0;
     bool success = false;
+    _ifClose = false;
 
     while(!success) {
+
+        if(_ifClose){
+            break;
+        }
 
         qDebug() << state;
 
@@ -171,6 +176,8 @@ QString FingerRecog::recogFinger()
             break;
         }
     }
+
+    serial.close();
 
     qDebug() << "fingerID" << fingerID;
     return fingerID;

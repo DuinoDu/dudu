@@ -14,6 +14,9 @@ public:
 
     QString recogFinger();
 
+    void closeSerial(){ _ifClose = true; }
+    bool isSerialClosed(){ return _ifClose; }
+
 signals:
 
 public slots:
@@ -40,6 +43,8 @@ private:
     QList<QString> _readConfigFile();
     void _int2uchars(int templateNum, uchar& addressH, uchar& addressL);
     void _initSerialPort(QSerialPort& serial);
+
+    bool _ifClose = false;
 
 };
 

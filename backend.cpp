@@ -4,6 +4,9 @@
 Backend::Backend(QQuickItem *parent):QQuickItem(parent)
 {
     _initDataBase();
+
+    rec = new FingerRecog;
+
     fingerTh = new FingerThread(rec);
     connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
     connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(_setSearchType(QString)));
@@ -84,6 +87,40 @@ QList<QString> Backend::select(QString fingerID)
 }
 
 
+QList<QString> Backend::searchPhone(QString phone)
+{
+    QList<QString> result;
+
+    QString filter;
+    filter.append("phone=");
+    filter.append(phone);
+
+    QString selectQuery;
+    selectQuery.append("select * from customer where ");
+    selectQuery.append(filter);
+
+    if(!query->exec(selectQuery)){
+        qDebug() << "Error while in sql";
+        return result;
+    }
+
+    int nameField = query->record().indexOf("name");
+    int phoneField = query->record().indexOf("phone");
+    int moneyField = query->record().indexOf("money");
+    int passwordField = query->record().indexOf("password");
+
+    if(query->next()){
+        result.append(query->value(nameField).toString());
+        result.append(query->value(phoneField).toString());
+        result.append(query->value(moneyField).toString());
+        result.append(query->value(passwordField).toString());
+    }
+
+    qDebug() << result;
+
+    return result;
+}
+
 void Backend::updateMoney(QString phone, QString money)
 {
     qDebug() << phone << money;
@@ -103,16 +140,53 @@ void Backend::updateMoney(QString phone, QString money)
 void Backend::createFinger()
 {
     qDebug() << "start multi thead for create finge...";
+
+
+    fingerTh = new FingerThread(rec);
     fingerTh->flag = 1;
-    fingerTh->start();
+
+    connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
+    connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(_setSearchType(QString)));
+
+    if(fingerTh->isRunning())
+        fingerTh->quit();
+    else
+        fingerTh->start();
 }
 
 
 void Backend::recogFinger(int flag)
 {
-    _searchType = flag;
-    fingerTh->flag = 2;
-    fingerTh->start(); 
+
+    qDebug() << "----------------------";
+
+    qDebug() << "-1-";
+
+
+    qDebug() << rec->isSerialClosed();
+
+    if(rec->isSerialClosed()){
+
+        qDebug() << "-2-";
+
+        _searchType = flag;
+
+        qDebug() << "-3-";
+
+        fingerTh->flag = 2;
+
+        qDebug() << "-4-";
+
+        fingerTh->start();
+    }
+    else{
+
+        qDebug() << "-5-";
+
+        rec->closeSerial();
+
+        qDebug() << "-6-";
+    }
 }
 
 

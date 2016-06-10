@@ -12,7 +12,8 @@ class FingerThread : public QThread
 {
     Q_OBJECT
 public:
-    FingerThread(FingerRecog& rec):rec(&rec){}
+    FingerThread(FingerRecog* rec):rec(rec){}
+    ~FingerThread(){}
     int flag = 0;
 
 signals:
@@ -49,6 +50,8 @@ public:
 
     Q_INVOKABLE QList<QString> select(QString fingerID);
 
+    Q_INVOKABLE QList<QString> searchPhone(QString phone);
+
     Q_INVOKABLE void updateMoney(QString phone, QString money);
 
     Q_INVOKABLE void createFinger();
@@ -78,10 +81,11 @@ private:
     QSqlDatabase db;
     QSqlQuery *query;
 
-    FingerRecog rec;
-    FingerThread *fingerTh;
+    //FingerRecog rec;
+    FingerRecog *rec = NULL;
+    FingerThread *fingerTh = NULL;
 
-    int _searchType;
+    int _searchType; // cost or add
 
     void _initDataBase();
 

@@ -22,7 +22,14 @@ Item {
             title: "开户"
             CreateTab{
                 width: root.width; height: root.height
-                onSaveClicked: db.insertNew(name, phone, money, password, finger1, finger2)
+                onSaveClicked: {
+                    var result = db.searchPhone(phone);
+                    if(result.length !== 0){
+                        root.showMessage(3, "");
+                        return;
+                    }
+                    db.insertNew(name, phone, money, password, finger1, finger2)
+                }
                 onCreateFinger: db.createFinger()
 
             }
@@ -40,18 +47,33 @@ Item {
             id: tab2
             title: "消费"
             CostTab{
+
                 onRecogFinger: {
                     console.log("put your finger on the plane");
                     db.recogFinger(1);
                 }
+
+                onSearchPhone: {
+                    var result = db.searchPhone(phone)
+                    if (result.length === 0){
+                        root.showMessage(2, "");
+                        return;
+                    }else{
+                        searchResult = result; // 0 name, 1 phone, 2 money, 3 passport
+                        showInputStep(2);
+                    }
+                }
+
                 onUpdateMoney: {
                     db.updateMoney(phone, money)
                 }
+
                 onFingerIDChanged: {
                     console.log("find one : "+fingerID);
                     console.log(searchResult);
                     searchResult = db.select(fingerID);
                 }
+
             }
             function setFingerID(fingerID){
                 tab2.childAt(10,10).fingerID = fingerID;
@@ -129,6 +151,10 @@ Item {
             break;
         case 2:
             msgStr = "当前用户不存在";
+            break;
+
+        case 3:
+            msgStr = "该电话号码已注册";
             break;
 
         default:
