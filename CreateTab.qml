@@ -25,7 +25,7 @@ Rectangle{
     Image{
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        source: "./img/bg10.jpg"
+        source: "qrc:/img/bg10.jpg"
     }
 
     Image{
@@ -35,7 +35,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/username.png"
+        source: "qrc:/img/username.png"
     }
 
     Image{
@@ -45,7 +45,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/phone.png"
+        source: "qrc:/img/phone.png"
     }
 
     Image{
@@ -55,7 +55,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/money.png"
+        source: "qrc:/img/money.png"
     }
 
     Image{
@@ -65,7 +65,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/password.png"
+        source: "qrc:/img/password.png"
     }
 
     Image{
@@ -76,7 +76,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: 50
         anchors.horizontalCenter: parent.horizontalCenter
-        source: root.fingerID1 === "" ? "./img/finger_off.png" : "./img/finger_on.png"
+        source: root.fingerID1 === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
 
         MouseArea{
             anchors.horizontalCenterOffset: 0
@@ -109,7 +109,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -50
         anchors.horizontalCenter: parent.horizontalCenter
-        source: root.fingerID2 === "" ? "./img/finger_off.png" : "./img/finger_on.png"
+        source: root.fingerID2 === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
 
         MouseArea{
             anchors.horizontalCenterOffset: 0
@@ -236,7 +236,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: 167
         anchors.horizontalCenter: parent.horizontalCenter
-        source: textInput_name.inputCorrect ? "./img/ok.png" : ""
+        source: textInput_name.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     Image {
@@ -246,7 +246,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: 167
-        source: textInput_phone.inputCorrect ? "./img/ok.png" : ""
+        source: textInput_phone.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     Image {
@@ -256,7 +256,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: 167
-        source: textInput_money.inputCorrect ? "./img/ok.png" : ""
+        source: textInput_money.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     Image {
@@ -266,7 +266,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: 167
-        source: textInput_password.inputCorrect ? "./img/ok.png" : ""
+        source: textInput_password.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     function updateState(){

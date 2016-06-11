@@ -32,7 +32,7 @@ Rectangle{
     Image{
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        source: "./img/bg2.jpg"
+        source: "qrc:/img/bg2.jpg"
     }
 
     Image{
@@ -42,7 +42,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/username.png"
+        source: "qrc:/img/username.png"
     }
 
     Image{
@@ -52,7 +52,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/phone.png"
+        source: "qrc:/img/phone.png"
     }
 
     Image{
@@ -62,7 +62,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/money.png"
+        source: "qrc:/img/money.png"
     }
 
     Image{
@@ -72,7 +72,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/rmb.png"
+        source: "qrc:/img/rmb.png"
     }
 
 
@@ -84,7 +84,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/changeInput.png"
+        source: "qrc:/img/changeInput.png"
 
         MouseArea{
             anchors.fill: parent
@@ -109,7 +109,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: 166
         anchors.horizontalCenter: parent.horizontalCenter
-        source: textEdit_cost.inputCorrect ? "./img/ok.png" : ""
+        source: textEdit_cost.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     Input_DD {
@@ -141,7 +141,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: 166
         anchors.horizontalCenter: parent.horizontalCenter
-        source: (label_phone.inputCorrect && root.inputTypeFlag === 1) ? "./img/search.png" : ""
+        source: (label_phone.inputCorrect && root.inputTypeFlag === 1) ? "qrc:/img/search.png" : ""
 
         MouseArea{
             anchors.fill: parent
@@ -188,7 +188,7 @@ Rectangle{
         anchors.horizontalCenterOffset: 28
         anchors.horizontalCenter: parent.horizontalCenter
         visible: (root.inputTypeFlag === 0)
-        source:  root.fingerID === "" ? "./img/finger_off.png" : "./img/finger_on.png"
+        source:  root.fingerID === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
 
         MouseArea{
             anchors.rightMargin: 0
@@ -224,7 +224,7 @@ Rectangle{
         onInputCorrectChanged: {
             if(inputCorrect){
                 if(text === root.searchResult[3]){
-                    passwordOKIcon.source = "./img/ok.png"
+                    passwordOKIcon.source = "qrc:/img/ok.png"
                 }else{
                     showMessage(4, "");
                 }
@@ -242,7 +242,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: 166
         anchors.horizontalCenter: parent.horizontalCenter
-        //source: textEdit_password.inputCorrect ? "./img/ok.png" : ""
+        //source: textEdit_password.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     Button_DD {

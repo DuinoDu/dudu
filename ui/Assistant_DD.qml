@@ -7,7 +7,7 @@ Image{
 
     property string text: "message"
 
-    source: "../img/message.png"
+    source: "qrc:/img/message.png"
     Text{
         y: 25
         text: parent.text

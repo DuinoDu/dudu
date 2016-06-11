@@ -25,7 +25,7 @@ Rectangle{
     Image{
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        source: "./img/bg5.jpg"
+        source: "qrc:/img/bg5.jpg"
     }
 
     Image{
@@ -35,7 +35,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/username.png"
+        source: "qrc:/img/username.png"
     }
 
     Image{
@@ -45,7 +45,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/phone.png"
+        source: "qrc:/img/phone.png"
     }
 
     Image{
@@ -55,7 +55,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/money.png"
+        source: "qrc:/img/money.png"
     }
 
     Image{
@@ -65,7 +65,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: -108
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "./img/rmb.png"
+        source: "qrc:/img/rmb.png"
     }
 
 
@@ -75,7 +75,7 @@ Rectangle{
         height: 45
         anchors.horizontalCenterOffset: 166
         anchors.horizontalCenter: parent.horizontalCenter
-        source: textEdit_cost.inputCorrect ? "./img/ok.png" : ""
+        source: textEdit_cost.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
     Input_DD {
@@ -125,7 +125,7 @@ Rectangle{
         width: 45
         height: 45
         anchors.horizontalCenter: parent.horizontalCenter
-        source:  root.fingerID === "" ? "./img/finger_off.png" : "./img/finger_on.png"
+        source:  root.fingerID === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
 
         MouseArea{
             anchors.rightMargin: 0

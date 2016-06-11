@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/qml">
         <file>main.qml</file>
         <file>CreateTab.qml</file>
         <file>CostTab.qml</file>
@@ -8,6 +8,13 @@
         <file>ui/Input_DD.qml</file>
         <file>ui/MessageBox_DD.qml</file>
         <file>ui/Button_DD.qml</file>
+        <file>ui/Assistant_DD.qml</file>
+        <file>SplashScreen.qml</file>
+
+    </qresource>
+
+
+    <qresource prefix="/">
         <file>img/finger_off.png</file>
         <file>img/finger_on.png</file>
         <file>img/money.png</file>
@@ -18,7 +25,6 @@
         <file>img/speaker_on.png</file>
         <file>img/username.png</file>
         <file>img/rmb.png</file>
-        <file>SplashScreen.qml</file>
         <file>img/splash.png</file>
         <file>img/splashBg.png</file>
         <file>img/icon_48x48.ico</file>
@@ -26,7 +32,6 @@
         <file>img/bg5.jpg</file>
         <file>img/bg10.jpg</file>
         <file>img/changeInput.png</file>
-        <file>ui/Assistant_DD.qml</file>
         <file>img/message.png</file>
         <file>img/search.png</file>
     </qresource>

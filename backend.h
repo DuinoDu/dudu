@@ -81,7 +81,6 @@ private:
     QSqlDatabase db;
     QSqlQuery *query;
 
-    //FingerRecog rec;
     FingerRecog *rec = NULL;
     FingerThread *fingerTh = NULL;
 
