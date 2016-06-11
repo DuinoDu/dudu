@@ -9,7 +9,6 @@
         <file>ui/MessageBox_DD.qml</file>
         <file>ui/Button_DD.qml</file>
         <file>ui/Assistant_DD.qml</file>
-        <file>SplashScreen.qml</file>
         <file>ConfigTab.qml</file>
         <file>ManageTab.qml</file>
     </qresource>
