@@ -113,13 +113,10 @@ QString FingerRecog::recogFinger()
 
     int state = 0;
     bool success = false;
-    _ifClose = false;
 
     while(!success) {
 
-        if(_ifClose){
-            break;
-        }
+        if(!isOpen){ break; }
 
         qDebug() << state;
 
@@ -177,9 +174,11 @@ QString FingerRecog::recogFinger()
         }
     }
 
-    serial.close();
+    if(!isOpen) fingerID = "-1";
 
-    qDebug() << "fingerID" << fingerID;
+    serial.close();
+    isOpen = false;
+
     return fingerID;
 }
 
@@ -428,6 +427,8 @@ void FingerRecog::_initSerialPort(QSerialPort& serial)
         qDebug() << (tr("Can't open %1, error code %2").arg(currentPortName).arg(serial.error()));
         return;
     }
+
+    isOpen = true;
 
     // base data for requestData
     requestData.resize(7);

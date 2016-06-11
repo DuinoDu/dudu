@@ -31,7 +31,6 @@ Item {
                     db.insertNew(name, phone, money, password, finger1, finger2)
                 }
                 onCreateFinger: db.createFinger()
-
             }
 
             function setFingerID(fingerID){
@@ -52,11 +51,13 @@ Item {
                     console.log("put your finger on the plane");
                     db.recogFinger(1);
                 }
+                onClosePort: db.closePort()
 
                 onSearchPhone: {
                     var result = db.searchPhone(phone)
                     if (result.length === 0){
                         root.showMessage(2, "");
+                        tab2.childAt(10,10).clearInput();
                         return;
                     }else{
                         searchResult = result; // 0 name, 1 phone, 2 money, 3 passport
@@ -79,6 +80,8 @@ Item {
                 tab2.childAt(10,10).fingerID = fingerID;
             }
         }
+
+
         Tab {
             id: tab3
             title: "充值"
@@ -128,10 +131,16 @@ Item {
         onMessage: root.showMessage(flag, msg)
         onCreateReady: tab1.setFingerID(fingerID)
         onSearchReady: {
+
             if(fingerID === ""){
                 root.showMessage(2, "");
+                tab2.childAt(10,10).fingerState = 0;
                 return;
             }
+            else if(fingerID === "-1"){
+                return;
+            }
+
             if(searchType === 1)
                 tab2.setFingerID(fingerID);
             else if(searchType === 2)

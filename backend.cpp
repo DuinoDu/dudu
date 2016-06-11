@@ -6,8 +6,8 @@ Backend::Backend(QQuickItem *parent):QQuickItem(parent)
     _initDataBase();
 
     rec = new FingerRecog;
-
     fingerTh = new FingerThread(rec);
+
     connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
     connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(_setSearchType(QString)));
 }
@@ -140,6 +140,7 @@ void Backend::updateMoney(QString phone, QString money)
 
 void Backend::createFinger()
 {
+    /*
     qDebug() << "start multi thead for create finge...";
 
 
@@ -153,41 +154,34 @@ void Backend::createFinger()
         fingerTh->quit();
     else
         fingerTh->start();
+
+    */
 }
 
 
 void Backend::recogFinger(int flag)
 {
 
-    qDebug() << "----------------------";
-
-    qDebug() << "-1-";
-
-
-    qDebug() << rec->isSerialClosed();
-
-    if(rec->isSerialClosed()){
-
-        qDebug() << "-2-";
+    if(!rec->isOpen){
 
         _searchType = flag;
 
-        qDebug() << "-3-";
-
         fingerTh->flag = 2;
-
-        qDebug() << "-4-";
 
         fingerTh->start();
     }
     else{
-
-        qDebug() << "-5-";
-
-        rec->closeSerial();
-
-        qDebug() << "-6-";
+        qDebug() << "port is on use";
     }
+}
+
+
+void Backend::closePort()
+{
+    if(rec->isOpen)
+        rec->closePort();
+    else
+        qDebug() << "port is not open";
 }
 
 

@@ -9,10 +9,15 @@ Rectangle{
     color: "#dddddd"
 
     signal recogFinger()
+    signal closePort()
+    property int fingerState: 0 // 0 is to open port, 1 is to close port
+
+
     signal searchPhone(string phone)
     signal updateMoney(string phone, string money)
 
     property string fingerID: ""
+    onFingerIDChanged: {  console.log("fingerState: ",root.fingerState);  root.fingerState = 0;}
 
     property variant searchResult: []
     onSearchResultChanged: {
@@ -206,7 +211,15 @@ Rectangle{
                 button_recognition.width /= 1.2;
                 button_recognition.height /= 1.2;
             }
-            onClicked: root.recogFinger()
+            onClicked: {
+                if (root.fingerState === 0){
+                    root.recogFinger();
+                    root.fingerState = 1;
+                }else if (root.fingerState === 1){
+                    root.closePort();
+                    root.fingerState = 0;
+                }
+            }
         }
     }
 

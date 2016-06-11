@@ -58,6 +58,8 @@ public:
 
     Q_INVOKABLE void recogFinger(int flag); // 1 is cost, 2 is add
 
+    Q_INVOKABLE void closePort();
+
     Q_INVOKABLE void hello();
 
     qreal delta() const { return m_delta; }

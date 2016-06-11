@@ -14,8 +14,9 @@ public:
 
     QString recogFinger();
 
-    void closeSerial(){ _ifClose = true; }
-    bool isSerialClosed(){ return _ifClose; }
+    bool isOpen = false;
+
+    void closePort(){ isOpen = false; }
 
 signals:
 
@@ -44,7 +45,7 @@ private:
     void _int2uchars(int templateNum, uchar& addressH, uchar& addressL);
     void _initSerialPort(QSerialPort& serial);
 
-    bool _ifClose = false;
+    //bool _ifClose = true;
 
 };
 
