@@ -3,45 +3,14 @@
 
 #include <QQuickItem>
 #include <QtSql>
-#include <QThread>
 #include <QDebug>
 #include "fingerrecog.h"
-
-
-class FingerThread : public QThread
-{
-    Q_OBJECT
-public:
-    FingerThread(FingerRecog* rec):rec(rec){}
-    ~FingerThread(){}
-    int flag = 0;
-
-signals:
-    void createReady(QString fingerID);
-    void searchReady(QString fingerID);
-
-private:
-    FingerRecog *rec;
-
-    void run() Q_DECL_OVERRIDE{
-        QString fingerID;
-        if(flag == 1){
-            fingerID = rec->createFinger();
-            emit createReady(fingerID);
-        }
-        else if(flag == 2){
-            fingerID = rec->recogFinger();
-            emit searchReady(fingerID);
-        }
-    }
-};
+#include "fingerthread.h"
 
 
 class Backend : public QQuickItem
 {
     Q_OBJECT
-
-    Q_PROPERTY(qreal delta READ delta WRITE setDelta NOTIFY deltaChanged)
 
 public:
     Backend(QQuickItem *parent = 0);
@@ -60,33 +29,26 @@ public:
 
     Q_INVOKABLE void closePort();
 
-    Q_INVOKABLE void hello();
-
-    qreal delta() const { return m_delta; }
-    void setDelta(qreal delta){
-        m_delta = delta;
-        emit deltaChanged();
-    }
-
 signals:
-    void deltaChanged();
     void message(int flag, QString msg);
     void createReady(QString fingerID);
-    void searchReady(QString fingerID, int searchType);
+    void searchReadyCost(QString fingerID);
+    void searchReadyAdd(QString fingerID);
 
 private slots:
-    void _setSearchType(QString fingerID);
+    void searchReady(QString fingerID);
 
 private:
-    qreal m_delta;
 
     QSqlDatabase db;
     QSqlQuery *query;
 
-    FingerRecog *rec = NULL;
     FingerThread *fingerTh = NULL;
+    FingerRecog *rec = NULL;
 
-    int _searchType; // cost or add
+    enum SEARCHTYPE{ COST, ADD };
+
+    SEARCHTYPE _searchType = COST; // cost or add
 
     void _initDataBase();
 

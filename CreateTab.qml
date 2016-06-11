@@ -8,6 +8,9 @@ Rectangle{
     signal saveClicked(string name, string phone, string money, string password, string finger1, string finger2)
 
     signal createFinger()
+    signal closePort()
+    property int fingerState: 0 // 0 is to open port, 1 is to close port
+
 
     property string fingerID1: ""
     property string fingerID2: ""
@@ -96,7 +99,13 @@ Rectangle{
             }
             onClicked: {
                 root.flag = 1;
-                root.createFinger();
+                if (root.fingerState === 0){
+                    root.createFinger();
+                    root.fingerState = 1;
+                }else if (root.fingerState === 1){
+                    root.closePort();
+                    root.fingerState = 0;
+                }
             }
         }
     }
@@ -129,7 +138,13 @@ Rectangle{
             }
             onClicked: {
                 root.flag = 2;
-                root.createFinger();
+                if (root.fingerState === 0){
+                    root.createFinger();
+                    root.fingerState = 1;
+                }else if (root.fingerState === 1){
+                    root.closePort();
+                    root.fingerState = 0;
+                }
             }
         }
     }

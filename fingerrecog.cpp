@@ -21,6 +21,8 @@ QString FingerRecog::createFinger()
 
     while( !success ){
 
+        if(!isOpen){ break; }
+
         qDebug() << state;
 
         switch (state) {
@@ -96,7 +98,10 @@ QString FingerRecog::createFinger()
         }
     }
 
-    if(fingerID.length() != 0) qDebug() << "Success, fingerID is" << fingerID;
+    if(!isOpen) fingerID = "-1"; // when double click finger button, give a flag to UI
+
+    serial.close();
+    isOpen = false;
 
     return fingerID;
 }

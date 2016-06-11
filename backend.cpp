@@ -9,9 +9,14 @@ Backend::Backend(QQuickItem *parent):QQuickItem(parent)
     fingerTh = new FingerThread(rec);
 
     connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
-    connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(_setSearchType(QString)));
+
+    connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(searchReady(QString)));
 }
 
+
+/***********************
+ database API
+***********************/
 
 int Backend::insertNew(QString name, QString phone, QString money, QString password, QString fingerID1, QString fingerID2)
 {
@@ -138,24 +143,22 @@ void Backend::updateMoney(QString phone, QString money)
 }
 
 
+
+/***********************
+ serial port API
+***********************/
+
 void Backend::createFinger()
 {
-    /*
-    qDebug() << "start multi thead for create finge...";
+    if(!rec->isOpen){
 
+        fingerTh->type = FingerThread::CREATE;
 
-    fingerTh = new FingerThread(rec);
-    fingerTh->flag = 1;
-
-    connect(fingerTh, SIGNAL(createReady(QString)), this, SIGNAL(createReady(QString)));
-    connect(fingerTh, SIGNAL(searchReady(QString)), this, SLOT(_setSearchType(QString)));
-
-    if(fingerTh->isRunning())
-        fingerTh->quit();
-    else
         fingerTh->start();
-
-    */
+    }
+    else{
+        qDebug() << "port is on use";
+    }
 }
 
 
@@ -164,9 +167,10 @@ void Backend::recogFinger(int flag)
 
     if(!rec->isOpen){
 
-        _searchType = flag;
+        if (flag == 0) _searchType = COST;
+        else if(flag == 1) _searchType = ADD;
 
-        fingerTh->flag = 2;
+        fingerTh->type = FingerThread::SEARCH;
 
         fingerTh->start();
     }
@@ -185,10 +189,10 @@ void Backend::closePort()
 }
 
 
-void Backend::hello(){
-    qDebug()<< "Hello, DuDu";
-}
 
+/***********************
+ private function
+***********************/
 
 void Backend::_initDataBase()
 {
@@ -217,7 +221,10 @@ void Backend::_initDataBase()
         qDebug() << "Create table failed\n";
 }
 
-void Backend::_setSearchType(QString fingerID)
+void Backend::searchReady(QString fingerID)
 {
-    emit searchReady(fingerID, _searchType);
+    if(_searchType == COST )
+        emit searchReadyCost(fingerID);
+    else if(_searchType == ADD)
+        emit searchReadyAdd(fingerID);
 }

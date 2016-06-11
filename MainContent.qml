@@ -22,6 +22,11 @@ Item {
             title: "开户"
             CreateTab{
                 width: root.width; height: root.height
+
+                onCreateFinger: db.createFinger()
+
+                onClosePort: db.closePort()
+
                 onSaveClicked: {
                     var result = db.searchPhone(phone);
                     if(result.length !== 0){
@@ -30,7 +35,7 @@ Item {
                     }
                     db.insertNew(name, phone, money, password, finger1, finger2)
                 }
-                onCreateFinger: db.createFinger()
+
             }
 
             function setFingerID(fingerID){
@@ -49,8 +54,9 @@ Item {
 
                 onRecogFinger: {
                     console.log("put your finger on the plane");
-                    db.recogFinger(1);
+                    db.recogFinger(0);
                 }
+
                 onClosePort: db.closePort()
 
                 onSearchPhone: {
@@ -76,6 +82,7 @@ Item {
                 }
 
             }
+
             function setFingerID(fingerID){
                 tab2.childAt(10,10).fingerID = fingerID;
             }
@@ -88,7 +95,7 @@ Item {
             AddTab{
                 onRecogFinger: {
                     console.log("put your finger on the plane");
-                    db.recogFinger(2);
+                    db.recogFinger(1);
                 }
                 onUpdateMoney: {
                     db.updateMoney(phone, money)
@@ -129,8 +136,17 @@ Item {
     Backend{
         id: db
         onMessage: root.showMessage(flag, msg)
-        onCreateReady: tab1.setFingerID(fingerID)
-        onSearchReady: {
+
+        onCreateReady: {
+            if (fingerID === "-1"){
+                return;
+            }
+            else if(fingerID !== ""){
+                tab1.setFingerID(fingerID);
+            }
+        }
+
+        onSearchReadyCost: {
 
             if(fingerID === ""){
                 root.showMessage(2, "");
@@ -141,10 +157,22 @@ Item {
                 return;
             }
 
-            if(searchType === 1)
-                tab2.setFingerID(fingerID);
-            else if(searchType === 2)
-                tab3.setFingerID(fingerID);
+            tab2.setFingerID(fingerID);
+        }
+
+        onSearchReadyAdd: {
+
+            if(fingerID === ""){
+                root.showMessage(2, "");
+                tab3.childAt(10,10).fingerState = 0;
+                return;
+            }
+            else if(fingerID === "-1"){
+                return;
+            }
+
+            tab3.setFingerID(fingerID);
+
         }
     }
 

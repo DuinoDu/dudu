@@ -10,11 +10,15 @@ class FingerRecog : public QObject
 public:
     FingerRecog();
 
+    // this two function should run in second thread
+
     QString createFinger();
 
     QString recogFinger();
 
     bool isOpen = false;
+
+    // a public method for the main thread to exit the second thread
 
     void closePort(){ isOpen = false; }
 

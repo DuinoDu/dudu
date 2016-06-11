@@ -6,7 +6,8 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     backend.cpp \
-    fingerrecog.cpp
+    fingerrecog.cpp \
+    fingerthread.cpp
 
 RESOURCES += \
     qml.qrc
@@ -17,6 +18,7 @@ QML_IMPORT_PATH =
 HEADERS += \
     backend.h \
     fingerrecog.h \
-    splashwidget.h
+    splashwidget.h \
+    fingerthread.h
 
 RC_ICONS = img/icon_48x48.ico
