@@ -9,9 +9,15 @@ Rectangle{
     color: "#dddddd"
 
     signal recogFinger()
+    signal closePort()
+    property int fingerState: 0 // 0 is to open port, 1 is to close port
+
+
+    signal searchPhone(string phone)
     signal updateMoney(string phone, string money)
 
     property string fingerID: ""
+    onFingerIDChanged: {  console.log("fingerState: ",root.fingerState);  root.fingerState = 0;}
 
     property variant searchResult: []
     onSearchResultChanged: {
@@ -20,6 +26,12 @@ Rectangle{
             label_phone.text = root.searchResult[1];
             label_money.text = root.searchResult[2];
         }
+    }
+
+    property int inputTypeFlag: 0 // 0 is finger input, 1 is passport input
+    onInputTypeFlagChanged: {
+        root.showInputStep(1);
+        root.clearInput();
     }
 
     Image{
@@ -70,6 +82,33 @@ Rectangle{
 
 
     Image{
+        id: inputType
+        x: 287
+        y: 123
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: -108
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "qrc:/img/changeInput.png"
+
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: {
+                inputType.width *= 1.5;
+                inputType.height *= 1.5;
+            }
+            onExited: {
+                inputType.width /= 1.5;
+                inputType.height /= 1.5;
+            }
+            onClicked: root.inputTypeFlag = ( root.inputTypeFlag === 0 ) ? 1 : 0
+        }
+
+    }
+
+
+    Image{
         y: 53
         width: 45
         height: 45
@@ -95,7 +134,34 @@ Rectangle{
         anchors.horizontalCenterOffset: 27
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: qsTr("电话号码")
-        enabled: false
+        enabled: (root.inputTypeFlag === 1)
+        re: "^1\\d{10}$"
+        //onInputCorrectChanged: //root.showInputStep(2)
+    }
+
+    Image{
+        id: searchButton
+        y: 258
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: 166
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: (label_phone.inputCorrect && root.inputTypeFlag === 1) ? "qrc:/img/search.png" : ""
+
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: label_phone.inputCorrect
+            onEntered: {
+                searchButton.width *= 1.5;
+                searchButton.height *= 1.5;
+            }
+            onExited: {
+                searchButton.width /= 1.5;
+                searchButton.height /= 1.5;
+            }
+            onClicked: root.searchPhone(label_phone.text)
+        }
+
     }
 
     Input_DD {
@@ -121,10 +187,12 @@ Rectangle{
     Image{
         id: button_recognition
         x: 384
-        y: 123
+        y: 124
         width: 45
         height: 45
+        anchors.horizontalCenterOffset: 28
         anchors.horizontalCenter: parent.horizontalCenter
+        visible: (root.inputTypeFlag === 0)
         source:  root.fingerID === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
 
         MouseArea{
@@ -143,8 +211,50 @@ Rectangle{
                 button_recognition.width /= 1.2;
                 button_recognition.height /= 1.2;
             }
-            onClicked: root.recogFinger()
+            onClicked: {
+                if (root.fingerState === 0){
+                    root.recogFinger();
+                    root.fingerState = 1;
+                }else if (root.fingerState === 1){
+                    root.closePort();
+                    root.fingerState = 0;
+                }
+            }
         }
+    }
+
+    Input_DD {
+        id: textEdit_password
+        x: 123
+        y: 121
+        visible: (root.inputTypeFlag === 1)
+        enabled: label_phone.inputCorrect
+        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenter: parent.horizontalCenter
+        placeholderText: "密码"
+        echoMode: TextInput.Password
+        re: "^\\d{6}$"
+        onInputCorrectChanged: {
+            if(inputCorrect){
+                if(text === root.searchResult[3]){
+                    passwordOKIcon.source = "qrc:/img/ok.png"
+                }else{
+                    showMessage(4, "");
+                }
+            }else{
+                passwordOKIcon.source = ""
+            }
+
+        }
+    }
+
+    Image{
+        id: passwordOKIcon
+        y: 123
+        width: 45
+        height: 45
+        anchors.horizontalCenterOffset: 166
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Button_DD {
@@ -160,7 +270,7 @@ Rectangle{
         fontColor: "#80C342"
         fontSize: 18
         fontFamily: "SimSun"
-        enabled: (textEdit_cost.inputCorrect && root.fingerID!=="") ? true : false
+        enabled: (textEdit_cost.inputCorrect && (root.fingerID!=="" || textEdit_password.inputCorrect)) ? true : false
         onClicked: {
             var originMoney = parseFloat(label_money.text)
             var add = parseFloat(textEdit_cost.text)
@@ -185,14 +295,7 @@ Rectangle{
         fontColor: "#80C342"
         fontSize: 18
         fontFamily: "SimSun"
-        onClicked:{
-            fingerID = ""
-            searchResult = []
-            textEdit_cost.text = ""
-            label_name.text = ""
-            label_phone.text = ""
-            label_money.text = ""
-        }
+        onClicked: root.clearInput()
 
     }
 
@@ -207,6 +310,10 @@ Rectangle{
             msgStr = "充值成功！";
             break;
 
+        case 4:
+            msgStr = "密码不正确，请重新输入！";
+            break;
+
         default:
             break;
         }
@@ -219,5 +326,67 @@ Rectangle{
             console.log("Error creating object");
         }
         msgBox.destroy(1800);
+    }
+
+    function showInputStep(step){
+
+        // step means assistant step for keyboard input
+        // 1 to input phone, 2 to input passport
+
+        var component, msgBox;
+
+        if(root.inputTypeFlag === 1){
+            if(step === 1){
+                component = Qt.createComponent("ui/Assistant_DD.qml");
+                msgBox = component.createObject(root, {
+                    "width":150 ,
+                    "anchors.left": label_phone.right,
+                    "anchors.top": label_phone.top,
+                    "anchors.topMargin": -10,
+                    "text": "输入手机号"});
+                if (msgBox === null) {
+                    console.log("Error creating object");
+                }
+                msgBox.destroy(1800);
+
+            }else if(step === 2){
+                component = Qt.createComponent("ui/Assistant_DD.qml");
+                msgBox = component.createObject(root, {
+                    "width":150 ,
+                    "anchors.left": textEdit_password.right,
+                    "anchors.leftMargin": 10,
+                    "anchors.top": button_recognition.top,
+                    "anchors.topMargin": -10,
+                    "text": "输入密码"});
+                if (msgBox === null) {
+                    console.log("Error creating object");
+                }
+                msgBox.destroy(1800);
+            }
+
+        }else if(root.inputTypeFlag === 0 ){
+            component = Qt.createComponent("ui/Assistant_DD.qml");
+            msgBox = component.createObject(root, {
+                "width":150 ,
+                "anchors.left": button_recognition.right,
+                "anchors.leftMargin": 72,
+                "anchors.top": button_recognition.top,
+                "anchors.topMargin": -10,
+                "text": "识别指纹"});
+            if (msgBox === null) {
+                console.log("Error creating object");
+            }
+            msgBox.destroy(1800);
+        }
+    }
+
+    function clearInput(){
+        fingerID = ""
+        searchResult = []
+        textEdit_cost.text = ""
+        label_name.text = ""
+        label_phone.text = ""
+        label_money.text = ""
+        textEdit_password.text = ""
     }
 }

@@ -97,6 +97,21 @@ Item {
                     console.log("put your finger on the plane");
                     db.recogFinger(1);
                 }
+
+                onClosePort: db.closePort()
+
+                onSearchPhone: {
+                    var result = db.searchPhone(phone)
+                    if (result.length === 0){
+                        root.showMessage(2, "");
+                        tab2.childAt(10,10).clearInput();
+                        return;
+                    }else{
+                        searchResult = result; // 0 name, 1 phone, 2 money, 3 passport
+                        showInputStep(2);
+                    }
+                }
+
                 onUpdateMoney: {
                     db.updateMoney(phone, money)
                 }
