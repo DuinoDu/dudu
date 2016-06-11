@@ -19,7 +19,7 @@ Item {
 
         Tab {
             id: tab1
-            title: "开户"
+            title: "添加会员"
             CreateTab{
                 width: root.width; height: root.height
 
@@ -80,7 +80,6 @@ Item {
                     console.log(searchResult);
                     searchResult = db.select(fingerID);
                 }
-
             }
 
             function setFingerID(fingerID){
@@ -126,6 +125,20 @@ Item {
             }
         }
 
+        Tab {
+            id: tab4
+            title: "管理"
+            ManageTab{}
+        }
+
+        Tab {
+            id: tab5
+            title: "设置"
+            ConfigTab{}
+
+        }
+
+
         style: TabViewStyle {
             frameOverlap: 1
             tabsMovable: true
@@ -133,8 +146,8 @@ Item {
             tab: Rectangle {
                 color: styleData.selected ? "steelblue" :"lightsteelblue"
                 border.color:  "steelblue"
-                implicitWidth: root.width/3
-                implicitHeight: 40
+                implicitWidth: root.width/5
+                implicitHeight: 60
                 radius: 2
                 Text {
                     id: text

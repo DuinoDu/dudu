@@ -10,10 +10,9 @@
         <file>ui/Button_DD.qml</file>
         <file>ui/Assistant_DD.qml</file>
         <file>SplashScreen.qml</file>
-
+        <file>ConfigTab.qml</file>
+        <file>ManageTab.qml</file>
     </qresource>
-
-
     <qresource prefix="/">
         <file>img/finger_off.png</file>
         <file>img/finger_on.png</file>
@@ -34,5 +33,7 @@
         <file>img/changeInput.png</file>
         <file>img/message.png</file>
         <file>img/search.png</file>
+        <file>img/bg7.jpg</file>
+        <file>img/bg9.jpg</file>
     </qresource>
 </RCC>

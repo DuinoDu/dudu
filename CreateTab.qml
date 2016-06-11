@@ -31,12 +31,25 @@ Rectangle{
         source: "qrc:/img/bg10.jpg"
     }
 
+    Rectangle{
+        x: 221
+        y: 27
+        width: 500
+        height: 440
+        color: "black"
+        radius: 10
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        opacity: 0.4
+    }
+
     Image{
         x: 77
         y: 53
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenter: textInput_name.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/username.png"
     }
@@ -44,9 +57,11 @@ Rectangle{
     Image{
         x: 77
         y: 110
-        width: 24
+        width: 25
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: 0
+        anchors.verticalCenter: textInput_phone.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/phone.png"
     }
@@ -56,7 +71,9 @@ Rectangle{
         y: 170
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: 0
+        anchors.verticalCenter: textInput_money.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/money.png"
     }
@@ -66,7 +83,8 @@ Rectangle{
         y: 230
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenter: textInput_password.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/password.png"
     }
@@ -77,6 +95,8 @@ Rectangle{
         y: 318
         width: 45
         height: 45
+        anchors.verticalCenterOffset: 100
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenterOffset: 50
         anchors.horizontalCenter: parent.horizontalCenter
         source: root.fingerID1 === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
@@ -116,6 +136,8 @@ Rectangle{
         y: 318
         width: 45
         height: 45
+        anchors.verticalCenterOffset: 100
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenterOffset: -50
         anchors.horizontalCenter: parent.horizontalCenter
         source: root.fingerID2 === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
@@ -154,7 +176,9 @@ Rectangle{
         id: textInput_name
         x: 350
         y: 50
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: -150
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "姓名"
         re: "[^\u0000-\u00FF]" // 中文
@@ -165,7 +189,9 @@ Rectangle{
         id: textInput_phone
         x: 139
         y: 110
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: -90
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "电话号码"
         re: "^1\\d{10}$"
@@ -176,7 +202,9 @@ Rectangle{
         id: textInput_money
         x: 139
         y: 170
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: -30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "充值金额"
         re: "[^\d.]"
@@ -187,7 +215,8 @@ Rectangle{
         id: textInput_password
         x: 139
         y: 230
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: 30
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "密码"
         echoMode: TextInput.Password
@@ -200,6 +229,8 @@ Rectangle{
         x: 249
         y: 408
         text: qsTr("确  定")
+        anchors.verticalCenterOffset: 165
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenterOffset: -80
         anchors.horizontalCenter: parent.horizontalCenter
         width: 115; height: 40
@@ -223,10 +254,10 @@ Rectangle{
     Button_DD{
         id: button_cancel
         text: qsTr("取  消")
-        anchors.top: button_ok.top
-        anchors.topMargin: 0
-        anchors.left: button_ok.right
-        anchors.leftMargin: 40
+        anchors.verticalCenterOffset: 165
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 80
+        anchors.horizontalCenter: parent.horizontalCenter
         width: 115; height: 40
         radius: 20
         border.color: "#80C342"
@@ -249,7 +280,9 @@ Rectangle{
         y: 53
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: 167
+        anchors.verticalCenterOffset: 0
+        anchors.verticalCenter: textInput_name.verticalCenter
+        anchors.horizontalCenterOffset: 140
         anchors.horizontalCenter: parent.horizontalCenter
         source: textInput_name.inputCorrect ? "qrc:/img/ok.png" : ""
     }
@@ -259,8 +292,10 @@ Rectangle{
         y: 110
         width: 45
         height: 45
+        anchors.verticalCenterOffset: 0
+        anchors.verticalCenter: textInput_phone.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 167
+        anchors.horizontalCenterOffset: 140
         source: textInput_phone.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
@@ -269,8 +304,10 @@ Rectangle{
         y: 170
         width: 45
         height: 45
+        anchors.verticalCenterOffset: 0
+        anchors.verticalCenter: textInput_money.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 167
+        anchors.horizontalCenterOffset: 140
         source: textInput_money.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 
@@ -279,8 +316,9 @@ Rectangle{
         y: 233
         width: 45
         height: 45
+        anchors.verticalCenter: textInput_password.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 167
+        anchors.horizontalCenterOffset: 140
         source: textInput_password.inputCorrect ? "qrc:/img/ok.png" : ""
     }
 

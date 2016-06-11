@@ -22,3 +22,4 @@ HEADERS += \
     fingerthread.h
 
 RC_ICONS = img/icon_48x48.ico
+

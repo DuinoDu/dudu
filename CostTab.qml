@@ -40,12 +40,29 @@ Rectangle{
         source: "qrc:/img/bg2.jpg"
     }
 
+    Rectangle{
+        x: 221
+        y: 27
+        width: 500
+        height: 440
+        color: "black"
+        radius: 10
+        anchors.verticalCenterOffset: 0
+        anchors.horizontalCenterOffset: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        opacity: 0.4
+    }
+
+
     Image{
         x: 287
         y: 198
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: -30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/username.png"
     }
@@ -55,7 +72,9 @@ Rectangle{
         y: 258
         width: 24
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: 30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/phone.png"
     }
@@ -65,7 +84,9 @@ Rectangle{
         y: 318
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: 90
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/money.png"
     }
@@ -75,11 +96,12 @@ Rectangle{
         y: 53
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: -150
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/rmb.png"
     }
-
 
     Image{
         id: inputType
@@ -87,7 +109,9 @@ Rectangle{
         y: 123
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: -108
+        anchors.verticalCenterOffset: -90
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: -140
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/changeInput.png"
 
@@ -112,7 +136,9 @@ Rectangle{
         y: 53
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: 166
+        anchors.verticalCenterOffset: -150
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 140
         anchors.horizontalCenter: parent.horizontalCenter
         source: textEdit_cost.inputCorrect ? "qrc:/img/ok.png" : ""
     }
@@ -121,7 +147,9 @@ Rectangle{
         id: label_name
         x: 154
         y: 195
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: -30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: qsTr("姓名")
         enabled: false
@@ -131,7 +159,9 @@ Rectangle{
         id: label_phone
         x: 154
         y: 255
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: 30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: qsTr("电话号码")
         enabled: (root.inputTypeFlag === 1)
@@ -144,7 +174,9 @@ Rectangle{
         y: 258
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: 166
+        anchors.verticalCenterOffset: 30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 140
         anchors.horizontalCenter: parent.horizontalCenter
         source: (label_phone.inputCorrect && root.inputTypeFlag === 1) ? "qrc:/img/search.png" : ""
 
@@ -168,7 +200,9 @@ Rectangle{
         id: label_money
         x: 154
         y: 315
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: 90
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: qsTr("余额")
         enabled: false
@@ -178,7 +212,9 @@ Rectangle{
         id: textEdit_cost
         x: 123
         y: 50
-        anchors.horizontalCenterOffset: 27
+        anchors.verticalCenterOffset: -150
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "消费金额"
         re: "[^\d.]"
@@ -190,7 +226,9 @@ Rectangle{
         y: 124
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: 28
+        anchors.verticalCenterOffset: -90
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         visible: (root.inputTypeFlag === 0)
         source:  root.fingerID === "" ? "qrc:/img/finger_off.png" : "qrc:/img/finger_on.png"
@@ -227,9 +265,11 @@ Rectangle{
         id: textEdit_password
         x: 123
         y: 121
+        anchors.verticalCenterOffset: -90
+        anchors.verticalCenter: parent.verticalCenter
         visible: (root.inputTypeFlag === 1)
         enabled: label_phone.inputCorrect
-        anchors.horizontalCenterOffset: 27
+        anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         placeholderText: "密码"
         echoMode: TextInput.Password
@@ -253,16 +293,21 @@ Rectangle{
         y: 123
         width: 45
         height: 45
-        anchors.horizontalCenterOffset: 166
+        anchors.verticalCenterOffset: -90
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 140
         anchors.horizontalCenter: parent.horizontalCenter
-        //source: textEdit_password.inputCorrect ? "qrc:/img/ok.png" : ""
     }
+
+
 
     Button_DD {
         id: button_ok
         x: 249
         y: 408
         text: qsTr("确认消费")
+        anchors.verticalCenterOffset: 165
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenterOffset: -80
         anchors.horizontalCenter: parent.horizontalCenter
         width: 115; height: 40
@@ -294,10 +339,10 @@ Rectangle{
     Button_DD {
         id: button_cancel
         text: qsTr("取  消")
-        anchors.top: button_ok.top
-        anchors.topMargin: 0
-        anchors.left: button_ok.right
-        anchors.leftMargin: 40
+        anchors.horizontalCenterOffset: 80
+        anchors.verticalCenterOffset: 165
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         width: 115; height: 40
         radius: 20
         border.color: "#80C342"
@@ -307,6 +352,7 @@ Rectangle{
         onClicked: root.clearInput()
 
     }
+
 
     function showMessage(flag, msg){
         console.log(flag, msg);

@@ -12,15 +12,14 @@ int main(int argc, char *argv[])
     qmlRegisterType<Backend>("DD", 1, 0, "Backend");
 
 
-    QQmlApplicationEngine engine;
-
     SplashWidget screen;
     screen.setTime(1800);
     screen.setSplashImgPath(":/img/splash.png");
     screen.setMainPath("qrc:/qml/main.qml");
     screen.start();
 
-    QObject::connect(&screen, SIGNAL(closeSplashScreen(QUrl)), &engine, SLOT(load(QUrl)));
+    //QQmlApplicationEngine engine;
+    //QObject::connect(&screen, SIGNAL(closeSplashScreen(QUrl)), &engine, SLOT(load(QUrl)));
 
     return app.exec();
 }

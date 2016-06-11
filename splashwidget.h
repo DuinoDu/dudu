@@ -8,6 +8,9 @@
 #include <QTimer>
 #include <QUrl>
 
+#include <QQmlApplicationEngine>
+#include <QQuickWindow>
+
 
 class SplashWidget : public QMainWindow
 {
@@ -17,6 +20,7 @@ public:
     SplashWidget(QWidget *parent = 0) : QMainWindow(parent){
         setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint);
         setAttribute(Qt::WA_TranslucentBackground);
+
     }
 
     void start(){
@@ -53,6 +57,11 @@ private slots:
         timer->stop();
         delete timer;
         emit closeSplashScreen(mainPath);
+
+        engine.load(mainPath);
+        QObject* applicationWindow = engine.rootObjects().value(0);
+        QQuickWindow* window = qobject_cast<QQuickWindow*>(applicationWindow);
+        window->showMaximized();
     }
 
 private:
@@ -62,6 +71,8 @@ private:
     int delayTimeMs;
     QImage image;
     int sizeH, sizeW;
+
+    QQmlApplicationEngine engine;
 };
 
 
