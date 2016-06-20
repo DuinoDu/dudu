@@ -35,7 +35,7 @@ private:
 
 
     uchar _genImg(QSerialPort& serial);
-    uchar _img2Tz(uchar bufferID = 0x01, QSerialPort& serial = static_cast<QSerialPort>(nullptr));
+    uchar _img2Tz(uchar bufferID, QSerialPort& serial);
     uchar _match(int& score, QSerialPort& serial);
     uchar _regModel(QSerialPort& serial);
     uchar _store(const uchar addressH, const uchar addressL, QSerialPort& serial);
